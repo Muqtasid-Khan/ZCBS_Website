@@ -158,7 +158,21 @@ LOGIN_URL = "/" + ADMIN_URL + "login/"
 FORM_RATE_LIMIT_PER_HOUR = int(os.environ.get("FORM_RATE_LIMIT_PER_HOUR", 8))
 CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
 
-EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+# --- Email (membership decision emails) ---------------------------------------
+# Set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD to send real emails (default host: Gmail SMTP).
+# Without them, emails are only printed to the server log and NOT delivered.
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_TIMEOUT = 10
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND") or (
+    "django.core.mail.backends.smtp.EmailBackend" if (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD)
+    else "django.core.mail.backends.console.EmailBackend")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL") or (
+    f"ZCBS <{EMAIL_HOST_USER}>" if EMAIL_HOST_USER else "webmaster@localhost")
+SITE_URL = os.environ.get("SITE_URL", "").rstrip("/")   # e.g. https://zcbs-website-47v7.vercel.app
 
 # --- Rich text editor ---------------------------------------------------------
 CKEDITOR_5_CONFIGS = {
