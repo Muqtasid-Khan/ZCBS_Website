@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Application received | {{ site.short_name }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Application received" subtitle="Thank you for applying to ZCBS. The team will review your application and contact you." crumbs=None %}
+<section class="section text-center"><div class="container"><a class="btn btn-navy" href="{% url 'core:home' %}">Back to home</a> <a class="btn btn-outline-navy" href="{% url 'events:index' %}">See upcoming events</a></div></section>
+{% endblock %}

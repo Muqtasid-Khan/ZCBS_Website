@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Events & Activities | {{ site.short_name }}{% endblock %}
+{% block meta_description %}Events and activities of the Zakariyan Character Building Society: sessions, workshops, competitions and cultural events.{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Events & Activities" subtitle="Orientations, expert sessions, workshops, competitions and cultural events — upcoming and past." eyebrow="What we do" crumbs=None %}
+<section class="section pt-4"><div class="container">
+  <form class="filter-bar mb-4" method="get" aria-label="Filter events"><div class="row g-2 align-items-end">
+    <div class="col-md-4"><label class="form-label" for="q">Search</label><input id="q" class="form-control" type="search" name="q" value="{{ q }}" placeholder="Event name, venue…"></div>
+    <div class="col-6 col-md-3"><label class="form-label" for="category">Category</label><select id="category" class="form-select" name="category"><option value="">All categories</option>{% for c in categories %}<option value="{{ c.slug }}" {% if c.slug == cat %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+    <div class="col-6 col-md-2"><label class="form-label" for="year">Academic year</label><select id="year" class="form-select" name="year"><option value="">All</option>{% for y in years %}<option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>{% endfor %}</select></div>
+    <div class="col-6 col-md-2"><label class="form-label" for="when">Show</label><select id="when" class="form-select" name="when"><option value="all">All</option><option value="upcoming" {% if when == 'upcoming' %}selected{% endif %}>Upcoming</option><option value="past" {% if when == 'past' %}selected{% endif %}>Past</option></select></div>
+    <div class="col-6 col-md-1 d-grid"><button class="btn btn-navy" type="submit" aria-label="Apply filters"><i class="bi bi-search"></i></button></div>
+  </div></form>
+  <div class="mb-4">{% for c in categories %}<a class="pill {% if c.slug == cat %}active{% endif %}" href="?category={{ c.slug }}"><i class="bi {{ c.icon }} me-1"></i>{{ c.name }}</a>{% endfor %}{% if cat or q or year or when != 'all' %}<a class="pill" href="{% url 'events:index' %}">Clear filters ✕</a>{% endif %}</div>
+  {% if upcoming %}<h2 class="mb-4">Upcoming</h2><div class="row g-4 mb-5">{% for e in upcoming %}<div class="col-md-6 col-lg-4">{% include "partials/event_card.html" %}</div>{% endfor %}</div>{% endif %}
+  {% if past %}<h2 class="mb-4">Past events archive</h2><div class="row g-4">{% for e in past %}<div class="col-md-6 col-lg-4">{% include "partials/event_card.html" %}</div>{% endfor %}</div>{% endif %}
+  {% if not total %}<div class="text-center py-5"><p class="lead-text">No events match your search yet.{% if not q and not cat and not year %} New events will appear here as soon as they are published.{% endif %}</p></div>{% endif %}
+  <p class="mt-5 text-center"><a class="link-arrow" href="{% url 'events:archive' %}">Archived events</a></p>
+</div></section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Our Team | {{ site.short_name }}{% endblock %}
+{% block meta_description %}Meet the {{ tenure }} student team of the Zakariyan Character Building Society, CASPAM Chapter, BZU Multan.{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Our Team" subtitle="The student team of ZCBS for the tenure "|add:tenure eyebrow="The people behind ZCBS" crumbs=None %}
+{% for cat, members in groups %}
+<section class="section{% cycle '' ' alt' %}"><div class="container">
+  <div class="section-head reveal"><span class="eyebrow">{{ members|length }} member{{ members|length|pluralize }}</span><h2>{{ cat.name }}</h2><span class="rule"></span>{% if cat.description %}<p class="lead-text">{{ cat.description }}</p>{% endif %}</div>
+  <div class="row g-4 justify-content-center">{% for m in members %}<div class="col-6 col-md-4 col-lg-3 reveal">{% include "partials/member_card.html" with lead=forloop.parentloop.first %}</div>{% endfor %}</div>
+</div></section>
+{% empty %}<section class="section"><div class="container text-center"><p class="lead-text">The team will be published here soon.</p></div></section>{% endfor %}
+<section class="section dark on-dark text-center"><div class="container reveal"><h2>Want to be part of the team?</h2><p class="lead-text">Apply for membership and take part in what we do.</p><a class="btn btn-gold" href="{% url 'membership:join' %}">Join ZCBS</a> <a class="btn btn-outline-gold" href="{% url 'team:archive' %}">Previous teams</a></div></section>
+{% endblock %}

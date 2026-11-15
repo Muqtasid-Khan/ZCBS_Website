@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Archived events | {{ site.short_name }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Archived events" subtitle="Older events kept for the record." crumbs=None %}
+<section class="section"><div class="container"><div class="row g-4">{% for e in events %}<div class="col-md-6 col-lg-4">{% include "partials/event_card.html" %}</div>{% empty %}<p class="lead-text">Nothing archived yet.</p>{% endfor %}</div></div></section>
+{% endblock %}

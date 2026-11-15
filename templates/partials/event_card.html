@@ -1,0 +1,17 @@
+{% load static %}
+<article class="card-z">
+  <a class="media" href="{{ e.get_absolute_url }}" tabindex="-1" aria-hidden="true">
+    {% if e.card_image %}<img src="{{ e.card_image.url }}" alt="" loading="lazy">{% else %}<div class="ph"><i class="bi {{ e.category.icon }}"></i></div>{% endif %}
+    {% if e.start_at %}<div class="date-badge"><b>{{ e.start_at|date:"d" }}</b><span>{{ e.start_at|date:"M Y" }}</span></div>{% endif %}
+  </a>
+  <div class="body">
+    <div><span class="tag">{{ e.category.name }}</span>{% if e.is_past and e.has_recap %} <span class="tag solid">Recap</span>{% endif %}</div>
+    <h3><a href="{{ e.get_absolute_url }}">{{ e.title }}</a></h3>
+    <div class="meta">
+      {% if e.start_at %}<span><i class="bi bi-clock"></i>{{ e.start_at|date:"D, d M · g:i A" }}</span>{% else %}<span><i class="bi bi-clock"></i>Date to be announced</span>{% endif %}
+      {% if e.venue %}<span><i class="bi bi-geo-alt"></i>{{ e.venue }}</span>{% endif %}
+    </div>
+    {% if e.summary %}<p>{{ e.summary|truncatechars:150 }}</p>{% endif %}
+    <a class="link-arrow more" href="{{ e.get_absolute_url }}">{% if e.is_past %}{% if e.has_recap %}Read the story{% else %}View event{% endif %}{% else %}Event details{% endif %}</a>
+  </div>
+</article>

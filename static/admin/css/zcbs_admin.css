@@ -1,0 +1,22 @@
+:root{--primary:#0B1B2E;--secondary:#14304f;--accent:#C9A24B;--primary-fg:#fff;--header-bg:#0B1B2E;--header-color:#F6F1E7;
+  --header-branding-color:#C9A24B;--header-link-color:#F6F1E7;--breadcrumbs-bg:#14304f;--breadcrumbs-fg:#F6F1E7;--breadcrumbs-link-fg:#C9A24B;
+  --link-fg:#0B1B2E;--link-hover-color:#8a6d22;--button-bg:#0B1B2E;--button-hover-bg:#14304f;--default-button-bg:#C9A24B;--default-button-hover-bg:#b48f3e;
+  --object-tools-bg:#0B1B2E;--object-tools-hover-bg:#14304f}
+#header{border-bottom:3px solid #C9A24B}
+.zcbs-brand{display:flex;align-items:center;gap:10px;color:#F6F1E7!important;font-family:Georgia,serif;letter-spacing:.12em;font-weight:700}
+.zcbs-brand small{font-weight:400;letter-spacing:.2em;color:#C9A24B;font-size:11px;text-transform:uppercase;margin-left:4px}
+.zcbs-viewsite{color:#C9A24B!important;font-size:13px;margin-right:12px}
+.default-button, input[type=submit].default{color:#0B1B2E!important;font-weight:700}
+a.zcbs-cta{background:#C9A24B!important;color:#0B1B2E!important;font-weight:700;letter-spacing:.06em;padding:12px 22px!important;border-radius:4px}
+.zcbs-welcome{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:#0B1B2E;color:#F6F1E7;padding:22px 26px;border-radius:8px;margin-bottom:18px}
+.zcbs-welcome h2{color:#C9A24B;margin:0 0 4px;font-size:22px}.zcbs-welcome p{margin:0;color:#d8d3c6}
+.zcbs-welcome .zcbs-cta{display:inline-block;font-size:14px}
+.zcbs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:18px}
+.zcbs-card{display:block;background:#fff;border:1px solid #e3dcc9;border-left:4px solid #C9A24B;border-radius:6px;padding:14px 16px;text-decoration:none}
+.zcbs-card b{display:block;font-size:28px;color:#0B1B2E}.zcbs-card span{color:#555;font-size:13px}
+.zcbs-quick{margin-bottom:22px}.zcbs-quick h3{margin:0 0 8px}
+.zcbs-quick a{display:inline-block;margin:0 8px 8px 0;padding:8px 14px;border:1px solid #0B1B2E;border-radius:4px;font-size:13px;text-decoration:none}
+.zcbs-quick a:hover{background:#0B1B2E;color:#fff}
+tr.zcbs-dragging{opacity:.4}tr.zcbs-over{outline:2px dashed #C9A24B}
+.zcbs-sort-hint{background:#fff8e6;border:1px solid #e6d29a;padding:6px 10px;border-radius:4px;margin:0 0 10px;font-size:12px}
+.hp-field{display:none}

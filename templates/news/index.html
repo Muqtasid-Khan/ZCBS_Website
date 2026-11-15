@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}News & Announcements | {{ site.short_name }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="News & Announcements" subtitle="Official notices, society updates and activity reports." eyebrow="Stay informed" crumbs=None %}
+<section class="section pt-4"><div class="container">
+  <form class="filter-bar mb-4" method="get"><div class="row g-2 align-items-end"><div class="col-md-6"><label class="form-label" for="q">Search</label><input id="q" class="form-control" type="search" name="q" value="{{ q }}"></div>
+    <div class="col-md-4"><label class="form-label" for="category">Category</label><select id="category" class="form-select" name="category"><option value="">All</option>{% for c in categories %}<option value="{{ c.slug }}" {% if c.slug == cat %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+    <div class="col-md-2 d-grid"><button class="btn btn-navy" type="submit">Filter</button></div></div></form>
+  <div class="row g-4">{% for a in page %}<div class="col-md-6 col-lg-4">{% include "partials/news_card.html" %}</div>{% empty %}<p class="lead-text text-center py-5">No announcements found.</p>{% endfor %}</div>
+  {% if page.paginator.num_pages > 1 %}<nav class="mt-5 d-flex justify-content-center gap-2" aria-label="Pages">{% if page.has_previous %}<a class="pill" href="?page={{ page.previous_page_number }}&q={{ q|urlencode }}&category={{ cat }}">← Newer</a>{% endif %}<span class="pill active">{{ page.number }} / {{ page.paginator.num_pages }}</span>{% if page.has_next %}<a class="pill" href="?page={{ page.next_page_number }}&q={{ q|urlencode }}&category={{ cat }}">Older →</a>{% endif %}</nav>{% endif %}
+</div></section>
+{% endblock %}

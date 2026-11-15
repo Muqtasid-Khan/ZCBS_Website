@@ -1,0 +1,56 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}{{ event.title }} | {{ site.short_name }}{% endblock %}
+{% block meta_description %}{{ event.summary|default:event.tagline }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ event.title }}{% endblock %}
+{% block og_description %}{{ event.summary|default:event.tagline }}{% endblock %}
+{% block og_image %}{% if event.card_image %}{{ request.scheme }}://{{ request.get_host }}{{ event.card_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'brand/og-card.png' %}{% endif %}{% endblock %}
+{% block head %}<script type="application/ld+json">{{ jsonld|safe }}</script>{% endblock %}
+{% block previewbar %}{% if preview_hidden %}<div class="preview-bar">STAFF PREVIEW — this event is not public yet (status: {{ event.get_status_display }}).</div>{% endif %}{% endblock %}
+{% block bodyclass %}has-hero{% endblock %}
+{% block content %}
+<header class="event-cover">
+  {% if event.card_image %}<div class="bg" style="background-image:url('{{ event.card_image.url }}')"></div>{% endif %}
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'core:home' %}">Home</a><span class="sep">/</span><a href="{% url 'events:index' %}">Events</a><span class="sep">/</span><a href="{% url 'events:index' %}?category={{ event.category.slug }}">{{ event.category.name }}</a></nav>
+    <span class="tag mb-3">{{ event.category.name }}</span>{% if event.is_past %} <span class="tag solid">Past event</span>{% elif event.start_at %} <span class="tag solid">Upcoming</span>{% endif %}
+    <h1 class="mt-2">{{ event.title }}</h1>
+    {% if event.tagline %}<p class="tagline">{{ event.tagline }}</p>{% endif %}
+  </div>
+</header>
+<div class="container"><div class="fact-bar"><div class="row g-3">
+  <div class="col-sm-6 col-lg-3 f"><i class="bi bi-calendar3"></i><div><small>Date</small>{% if event.start_at %}{{ event.start_at|date:"l, d F Y" }}{% else %}To be announced{% endif %}</div></div>
+  <div class="col-sm-6 col-lg-3 f"><i class="bi bi-clock"></i><div><small>Time</small>{% if event.start_at %}{{ event.start_at|date:"g:i A" }}{% if event.end_at %} – {{ event.end_at|date:"g:i A" }}{% endif %}{% else %}To be announced{% endif %}</div></div>
+  <div class="col-sm-6 col-lg-3 f"><i class="bi bi-geo-alt"></i><div><small>Venue</small>{{ event.venue|default:"To be announced" }}</div></div>
+  <div class="col-sm-6 col-lg-3 f"><i class="bi bi-tag"></i><div><small>Category</small>{{ event.category.name }}</div></div>
+</div></div></div>
+
+<section class="section pt-5"><div class="container"><div class="row g-5">
+  <div class="col-lg-8">
+    {% if event.is_past and event.has_recap %}
+      <span class="eyebrow">Event story</span>
+      <h2>{{ event.recap_title|default:"Event recap" }}</h2><span class="rule"></span>
+      <div class="prose reveal">{{ event.recap|safe }}</div>
+      {% if event.outcomes %}<h3 class="mt-5">Outcomes</h3><div class="prose">{{ event.outcomes|safe }}</div>{% endif %}
+      {% if event.description %}<h3 class="mt-5">About the event</h3><div class="prose">{{ event.description|safe }}</div>{% endif %}
+    {% else %}
+      {% if event.description %}<span class="eyebrow">About the event</span><h2>Overview</h2><span class="rule"></span><div class="prose reveal">{{ event.description|safe }}</div>
+      {% elif event.summary %}<div class="prose"><p>{{ event.summary }}</p></div>{% endif %}
+      {% if event.is_past and not event.has_recap %}<div class="pending-note mt-4">A recap of this event will be published soon.</div>{% endif %}
+    {% endif %}
+    {% if event.purpose %}<h3 class="mt-5">Purpose &amp; objectives</h3><div class="prose">{{ event.purpose|safe }}</div>{% endif %}
+    {% if highlights %}<h3 class="mt-5">Highlights</h3><div>{% for h in highlights %}<div class="hl"><div class="n">{{ forloop.counter|stringformat:"02d" }}</div><div><h4 class="h5">{{ h.title }}</h4>{% if h.text %}<p class="mb-0 text-muted">{{ h.text }}</p>{% endif %}{% if h.image %}<img class="img-fluid rounded mt-3" src="{{ h.image.url }}" alt="{{ h.title }}" loading="lazy">{% endif %}</div></div>{% endfor %}</div>{% endif %}
+    {% if activities %}<h3 class="mt-5">Key activities</h3><ul class="list-unstyled">{% for a in activities %}<li class="mb-3"><i class="bi bi-check2-circle text-warning me-2"></i><b>{{ a.title }}</b>{% if a.text %}<br><span class="text-muted ms-4 d-inline-block">{{ a.text }}</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
+    {% if speakers %}<h3 class="mt-5 mb-4">Speakers &amp; guests</h3><div class="row g-4">{% for s in speakers %}<div class="col-6 col-md-4"><div class="speaker"><div class="ph">{% if s.photo %}<img src="{{ s.photo.url }}" alt="{{ s.name }}">{% else %}{{ s.initials }}{% endif %}</div><h4 class="h6 mb-0">{{ s.name }}</h4><small class="text-muted">{{ s.role }}</small></div></div>{% endfor %}</div>{% endif %}
+    {% if photos %}<h3 class="mt-5 mb-3">Photo gallery</h3><div class="masonry">{% for p in photos %}<a href="{{ p.image.url }}" data-lightbox data-caption="{{ p.caption }}"><img src="{{ p.image.url }}" alt="{{ p.caption|default:event.title }}" loading="lazy"></a>{% endfor %}</div>{% endif %}
+    {% if videos %}<h3 class="mt-5 mb-3">Video highlights</h3><div class="row g-4">{% for v in videos %}<div class="col-md-6"><div class="video-wrap">{% if v.embed_url %}<iframe src="{{ v.embed_url }}" title="{{ v.caption|default:event.title }}" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>{% elif v.video_file %}<video src="{{ v.video_file.url }}" controls preload="metadata"></video>{% endif %}</div>{% if v.caption %}<p class="small text-muted mt-2">{{ v.caption }}</p>{% endif %}</div>{% endfor %}</div>{% endif %}
+  </div>
+  <aside class="col-lg-4"><div class="d-grid gap-4" style="position:sticky;top:100px">
+    {% if event.registration_is_open %}<div class="side-card" style="border-top:3px solid var(--gold)"><h3>Registration</h3>{% if event.registration_info %}<div class="prose small">{{ event.registration_info|safe }}</div>{% endif %}{% if event.registration_deadline %}<p class="small text-muted">Deadline: {{ event.registration_deadline|date:"d M Y, g:i A" }}</p>{% endif %}{% if event.registration_url %}<a class="btn btn-gold w-100" href="{{ event.registration_url }}" target="_blank" rel="noopener">Register now</a>{% endif %}</div>{% endif %}
+    {% if organizers or event.organizing_note %}<div class="side-card"><h3>Organizing team</h3>{% for m in organizers %}<div class="d-flex justify-content-between small border-bottom py-1"><span>{{ m.name }}</span><span class="text-muted">{{ m.designation }}</span></div>{% endfor %}{% if event.organizing_note %}<p class="small text-muted mt-2 mb-0">{{ event.organizing_note }}</p>{% endif %}</div>{% endif %}
+    {% if notices %}<div class="side-card"><h3>Announcements</h3>{% for n in notices %}<div class="mb-2"><a href="{{ n.get_absolute_url }}"><b>{{ n.title }}</b></a><br><small class="text-muted">{{ n.publish_at|date:"d M Y" }}</small></div>{% endfor %}</div>{% endif %}
+    <div class="side-card"><h3>Share</h3>{% include "partials/share.html" with share_title=event.title %}{% if event.start_at and not event.is_past %}<a class="btn btn-outline-navy w-100 mt-3" href="{% url 'events:ics' event.slug %}"><i class="bi bi-calendar-plus me-2"></i>Add to calendar</a>{% endif %}</div>
+  </div></aside>
+</div></div></section>
+{% if related %}<section class="section alt"><div class="container"><div class="section-head"><span class="eyebrow">Keep exploring</span><h2>Related events</h2></div><div class="row g-4">{% for e in related %}<div class="col-md-6 col-lg-4">{% include "partials/event_card.html" %}</div>{% endfor %}</div></div></section>{% endif %}
+{% endblock %}

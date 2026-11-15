@@ -1,0 +1,8 @@
+{% if upcoming %}
+<section class="section"><div class="container">
+  <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-4 reveal">
+    <div><span class="eyebrow">{{ section.eyebrow }}</span><h2 class="mb-0">{{ section.heading }}</h2></div>
+    {% if section.button_label %}<a class="link-arrow" href="{{ section.button_url }}">{{ section.button_label }}</a>{% endif %}
+  </div>
+  <div class="row g-4">{% for e in upcoming %}<div class="col-md-6 col-lg-4 reveal">{% include "partials/event_card.html" %}</div>{% endfor %}</div>
+</div></section>{% endif %}

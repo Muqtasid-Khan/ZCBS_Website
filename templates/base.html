@@ -1,0 +1,85 @@
+{% load static %}<!doctype html>
+<html lang="en" class="no-js{% if not site.enable_intro or request.path != '/' %} no-intro{% endif %}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ site.seo_title|default:site.site_name }}{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}{{ site.seo_description }}{% endblock %}">
+<meta name="theme-color" content="{{ site.primary_color }}">
+<meta property="og:site_name" content="{{ site.site_name }}">
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:title" content="{% block og_title %}{{ site.seo_title|default:site.site_name }}{% endblock %}">
+<meta property="og:description" content="{% block og_description %}{{ site.seo_description }}{% endblock %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% block og_image %}{% if site.og_image %}{{ request.scheme }}://{{ request.get_host }}{{ site.og_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'brand/og-card.png' %}{% endif %}{% endblock %}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% if site.favicon %}<link rel="icon" href="{{ site.favicon.url }}">{% else %}<link rel="icon" href="{% static 'brand/favicon.svg' %}" type="image/svg+xml"><link rel="icon" href="{% static 'brand/favicon.ico' %}" sizes="any">{% endif %}
+<link rel="apple-touch-icon" href="{% static 'brand/apple-touch-icon.png' %}">
+<script>(function(){var d=document.documentElement;d.classList.remove("no-js");try{var r=window.matchMedia("(prefers-reduced-motion: reduce)").matches;var s=localStorage.getItem("zcbs_intro_seen")==="1";if(r||({{ site.intro_once_per_visitor|yesno:"true,false" }}&&s)){d.classList.add("no-intro")}}catch(e){}})();</script>
+<link rel="preload" href="{% static 'vendor/fonts/inter-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/site.css' %}">
+<style>:root{--navy:{{ site.primary_color }};--gold:{{ site.accent_color }}}</style>
+{% block head %}{% endblock %}
+{% if site.analytics_id %}<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics_id }}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','{{ site.analytics_id }}',{anonymize_ip:true});</script>{% endif %}
+</head>
+<body class="{% block bodyclass %}no-hero{% endblock %}">
+<a class="skip-link" href="#main">Skip to content</a>
+{% if is_preview %}{% block previewbar %}{% endblock %}{% endif %}
+{% block intro %}{% endblock %}
+<nav class="site-nav navbar navbar-expand-lg {% block navclass %}solid{% endblock %}" aria-label="Main navigation">
+  <div class="container">
+    <a class="navbar-brand brand" href="{% url 'core:home' %}" aria-label="{{ site.short_name }} home">
+      {% if site.logo %}<img src="{{ site.logo.url }}" alt="{{ site.site_name }}">{% else %}<img src="{% static 'brand/zcbs-logo-compact-light.svg' %}" alt="{{ site.site_name }}" width="150" height="44">{% endif %}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        {% for item in nav_header %}<li class="nav-item"><a class="nav-link" href="{{ item.url }}" {% if item.open_in_new_tab %}target="_blank" rel="noopener"{% endif %} data-path="{{ item.url }}">{{ item.label }}</a></li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>
+<main id="main">
+{% if messages %}<div class="container" style="padding-top:{% block msgpad %}0{% endblock %}">{% for m in messages %}<div class="alert alert-{% if m.tags == 'error' %}danger{% else %}success{% endif %} mt-3" role="alert">{{ m }}</div>{% endfor %}</div>{% endif %}
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <img src="{% static 'brand/zcbs-logo-horizontal-light.svg' %}" alt="{{ site.site_name }}" style="max-width:300px;width:100%" class="mb-3" loading="lazy">
+        <p>{{ site.footer_text }}</p>
+        {% if site.socials %}<div class="social mt-3">{% for s in site.socials %}<a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name|title }}"><i class="bi {{ s.icon }}"></i></a>{% endfor %}</div>{% endif %}
+      </div>
+      <div class="col-6 col-lg-2"><h4>Explore</h4><ul>{% for item in nav_footer %}<li><a href="{{ item.url }}">{{ item.label }}</a></li>{% endfor %}</ul></div>
+      <div class="col-6 col-lg-3"><h4>Contact</h4><ul>
+        {% if site.contact_email %}<li><i class="bi bi-envelope me-2 text-warning"></i><a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></li>{% endif %}
+        {% if site.contact_phone %}<li><i class="bi bi-telephone me-2 text-warning"></i>{{ site.contact_phone }}</li>{% endif %}
+        <li><i class="bi bi-geo-alt me-2 text-warning"></i>{% if site.address %}{{ site.address }}{% else %}{{ site.chapter_line }}, {{ site.institution }}{% endif %}</li></ul></div>
+      <div class="col-lg-3">
+        {% if site.newsletter_enabled %}<h4>Newsletter</h4><p class="small">Get announcements and event updates by email.</p>
+        <form method="post" action="{% url 'core:newsletter' %}" class="d-flex gap-2">{% csrf_token %}
+          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="visually-hidden" for="nl-email">Email address</label>
+          <input id="nl-email" class="form-control form-control-sm" type="email" name="email" placeholder="Your email" required>
+          <button class="btn btn-gold btn-sm" type="submit">Join</button></form>{% endif %}
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-wrap justify-content-between gap-2">
+      <span>© {{ current_year }} {{ site.site_name }} — {{ site.chapter_line }}, {{ site.institution }}.</span>
+      <span>Student-run society website.</span>
+    </div>
+  </div>
+</footer>
+<script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+<script>
+(function(){var p=location.pathname.replace(/\/$/,'')||'/';document.querySelectorAll('.site-nav .nav-link').forEach(function(a){var h=(a.getAttribute('data-path')||'').split('?')[0].replace(/\/$/,'')||'/';if(h==='/'?p==='/':p===h||p.indexOf(h+'/')===0){a.classList.add('active');a.setAttribute('aria-current','page')}})})();
+</script>
+<script src="{% static 'js/main.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

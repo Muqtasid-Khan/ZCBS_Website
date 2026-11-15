@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | ZCBS Dashboard{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/css/zcbs_admin.css' %}">
+<link rel="icon" href="{% static 'brand/favicon.svg' %}" type="image/svg+xml">{% endblock %}
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}" class="zcbs-brand">
+  <img src="{% static 'brand/zcbs-emblem.svg' %}" alt="" height="34"><span>ZCBS <small>Dashboard</small></span></a></h1>
+{% endblock %}
+{% block nav-global %}<a class="zcbs-viewsite" href="/" target="_blank">View website ↗</a>{% endblock %}

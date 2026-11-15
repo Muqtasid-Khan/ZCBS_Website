@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}About ZCBS | {{ site.short_name }}{% endblock %}
+{% block meta_description %}{% if page.seo_description %}{{ page.seo_description }}{% else %}{{ site.seo_description }}{% endif %}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title=page.title|default:"About ZCBS" subtitle=page.subtitle eyebrow="Who we are" crumbs=None %}
+<div class="container pt-3">{% if has_pending %}<div class="pending-note">Preview for administrators: items marked "pending approval" are hidden from visitors until you approve them in the dashboard.</div>{% endif %}</div>
+{% if page %}<section class="section pt-4"><div class="container"><div class="row justify-content-center"><div class="col-lg-9 prose reveal">{{ page.body|safe }}
+  {% if page.approval == 'pending' %}<p class="pending-note">Pending approval (staff preview).</p>{% endif %}</div></div></div></section>{% endif %}
+{% if by_kind.vision or by_kind.mission %}<section class="section alt"><div class="container"><div class="row g-4">
+  {% for b in by_kind.vision %}<div class="col-md-6 reveal"><div class="vm-card"><i class="bi {{ b.icon }} fs-2 text-warning"></i><h3 class="mt-2">{{ b.title }}</h3><p class="mb-0">{{ b.text }}</p>{% if b.approval == 'pending' %}<p class="pending-note mt-3 mb-0">Pending approval</p>{% endif %}</div></div>{% endfor %}
+  {% for b in by_kind.mission %}<div class="col-md-6 reveal"><div class="vm-card"><i class="bi {{ b.icon }} fs-2 text-warning"></i><h3 class="mt-2">{{ b.title }}</h3><p class="mb-0">{{ b.text }}</p>{% if b.approval == 'pending' %}<p class="pending-note mt-3 mb-0">Pending approval</p>{% endif %}</div></div>{% endfor %}
+</div></div></section>{% endif %}
+{% if by_kind.objective %}<section class="section"><div class="container"><div class="section-head reveal"><span class="eyebrow">What we work towards</span><h2>Objectives</h2><span class="rule"></span></div>
+  <div class="row g-4">{% for b in by_kind.objective %}<div class="col-md-6 col-lg-4 reveal"><div class="value-card"><i class="bi {{ b.icon }}"></i><h3>{{ b.title }}</h3><p>{{ b.text }}</p>{% if b.approval == 'pending' %}<span class="tag mt-2">Pending approval</span>{% endif %}</div></div>{% endfor %}</div></div></section>{% endif %}
+{% if by_kind.value %}<section class="section dark on-dark"><div class="container"><div class="section-head center reveal"><span class="eyebrow">What guides us</span><h2>Core values</h2><span class="rule center"></span></div>
+  <div class="row g-4">{% for b in by_kind.value %}<div class="col-md-6 col-lg-4 reveal"><div class="value-card"><i class="bi {{ b.icon }}"></i><h3>{{ b.title }}</h3><p>{{ b.text }}</p>{% if b.approval == 'pending' %}<span class="tag mt-2">Pending approval</span>{% endif %}</div></div>{% endfor %}</div></div></section>{% endif %}
+<section class="section"><div class="container"><div class="row g-4">
+  {% for b in by_kind.approach %}{% include "core/_about_block.html" %}{% endfor %}
+  {% for b in by_kind.leadership %}{% include "core/_about_block.html" %}{% endfor %}
+  {% for b in by_kind.development %}{% include "core/_about_block.html" %}{% endfor %}
+  {% for b in by_kind.purpose %}{% include "core/_about_block.html" %}{% endfor %}
+</div></div></section>
+{% if timeline %}<section class="section alt"><div class="container"><div class="section-head reveal"><span class="eyebrow">Our journey</span><h2>Timeline of activities</h2><span class="rule"></span></div>
+  <div class="timeline reveal">{% for year, evs in timeline %}<div class="yr">{{ year }}</div>{% for e in evs %}<div class="it"><a href="{{ e.get_absolute_url }}">{{ e.title }}</a><small>{{ e.start_at|date:"d F Y" }} · {{ e.category.name }}</small></div>{% endfor %}{% endfor %}</div></div></section>{% endif %}
+{% endblock %}

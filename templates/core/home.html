@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% load static %}
+{% block bodyclass %}has-hero{% endblock %}
+{% block navclass %}{% endblock %}
+{% block intro %}{% if site.enable_intro %}
+<div id="intro" data-once="{{ site.intro_once_per_visitor|yesno:'1,0' }}" role="presentation" aria-label="Introduction animation">
+  <canvas aria-hidden="true"></canvas>
+  <div class="intro-inner">
+    <div class="intro-code" aria-hidden="true"></div>
+    <div class="intro-logo"><img src="{% static 'brand/zcbs-logo-primary-light.svg' %}" alt="{{ site.site_name }}"></div>
+  </div>
+  <button class="intro-skip" type="button">Skip intro</button>
+</div>
+<noscript><style>#intro{display:none}</style></noscript>
+{% endif %}{% endblock %}
+{% block content %}
+{% for section in sections %}{% include "core/sections/"|add:section.key|add:".html" %}{% endfor %}
+{% endblock %}
+{% block scripts %}{% if site.enable_intro %}<script src="{% static 'js/intro.js' %}"></script>{% endif %}{% endblock %}

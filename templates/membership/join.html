@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Join ZCBS | {{ site.short_name }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Join ZCBS" subtitle="Apply for membership of the Zakariyan Character Building Society." eyebrow="Membership" crumbs=None %}
+<section class="section"><div class="container"><div class="row g-5">
+  <div class="col-lg-4"><div class="prose">{{ site.membership_intro|safe }}</div></div>
+  <div class="col-lg-8">
+  {% if not site.membership_open %}<div class="alert alert-warning">Membership applications are currently closed. Please check back soon.</div>
+  {% else %}
+  <form method="post" novalidate class="side-card">{% csrf_token %}{{ form.website }}
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label" for="{{ form.full_name.id_for_label }}">Full name</label>{{ form.full_name }}{{ form.full_name.errors }}</div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.registration_number.id_for_label }}">Registration number</label>{{ form.registration_number }}{{ form.registration_number.errors }}</div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.program.id_for_label }}">Academic program</label>{{ form.program }}{{ form.program.errors }}</div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.semester.id_for_label }}">Semester</label>{{ form.semester }}{{ form.semester.errors }}</div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.email.id_for_label }}">Email</label>{{ form.email }}{{ form.email.errors }}</div>
+      <div class="col-md-6"><label class="form-label" for="{{ form.phone.id_for_label }}">Contact number</label>{{ form.phone }}{{ form.phone.errors }}</div>
+      <div class="col-12 checks"><span class="form-label d-block">Areas of interest</span>{{ form.interests }}{{ form.interests.errors }}</div>
+      <div class="col-12"><label class="form-label" for="{{ form.other_interests.id_for_label }}">{{ form.other_interests.label }}</label>{{ form.other_interests }}</div>
+      <div class="col-12"><label class="form-label" for="{{ form.reason.id_for_label }}">Why do you want to join ZCBS?</label>{{ form.reason }}{{ form.reason.errors }}</div>
+    </div>
+    <p class="small text-muted mt-3">Your details are used only to review your application.</p>
+    <button class="btn btn-navy" type="submit">Submit application</button>
+  </form>{% endif %}
+  </div>
+</div></div></section>
+{% endblock %}

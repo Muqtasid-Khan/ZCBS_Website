@@ -1,0 +1,18 @@
+<section class="section">
+  <div class="container"><div class="row align-items-center g-5">
+    <div class="col-lg-6 reveal">
+      <span class="eyebrow">{{ section.eyebrow }}</span><h2>{{ section.heading }}</h2><span class="rule"></span>
+      <p class="lead-text">{{ section.body }}</p>
+      {% if section.button_label %}<a class="link-arrow" href="{{ section.button_url }}">{{ section.button_label }}</a>{% endif %}
+    </div>
+    <div class="col-lg-6 reveal">
+      {% if section.image %}<img class="img-fluid rounded shadow" src="{{ section.image.url }}" alt="" loading="lazy">
+      {% else %}<div class="row g-3">
+        <div class="col-6"><div class="value-card"><i class="bi bi-shield-check"></i><h3>Character</h3></div></div>
+        <div class="col-6"><div class="value-card"><i class="bi bi-compass"></i><h3>Leadership</h3></div></div>
+        <div class="col-6"><div class="value-card"><i class="bi bi-mic"></i><h3>Communication</h3></div></div>
+        <div class="col-6"><div class="value-card"><i class="bi bi-people"></i><h3>Teamwork</h3></div></div>
+      </div>{% endif %}
+    </div>
+  </div></div>
+</section>

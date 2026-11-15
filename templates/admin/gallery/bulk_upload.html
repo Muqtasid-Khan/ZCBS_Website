@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> › <a href="{% url 'admin:gallery_mediaitem_changelist' %}">Media Library</a> › Upload many photographs</div>{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+  {{ form.non_field_errors }}
+  <fieldset class="module aligned">
+  {% for f in form %}
+    <div class="form-row">{{ f.errors }}<label for="{{ f.id_for_label }}">{{ f.label }}:</label> {{ f }}
+      {% if f.help_text %}<div class="help">{{ f.help_text }}</div>{% endif %}</div>
+  {% endfor %}
+  </fieldset>
+  <div class="submit-row"><input type="submit" class="default" value="Upload photographs"></div>
+</form>
+{% endblock %}

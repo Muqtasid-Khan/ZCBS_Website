@@ -1,0 +1,8 @@
+{% if vision or mission %}
+<section class="section alt"><div class="container">
+  <div class="section-head center reveal"><span class="eyebrow">{{ section.eyebrow }}</span><h2>{{ section.heading }}</h2><span class="rule center"></span></div>
+  <div class="row g-4">
+    {% if vision %}<div class="col-md-6 reveal"><div class="vm-card"><i class="bi {{ vision.icon }} fs-2 text-warning"></i><h3 class="mt-2">{{ vision.title }}</h3><p class="mb-0">{{ vision.text }}</p>{% if vision.approval == 'pending' %}<p class="pending-note mt-3 mb-0">Preview — pending approval, hidden from visitors.</p>{% endif %}</div></div>{% endif %}
+    {% if mission %}<div class="col-md-6 reveal"><div class="vm-card"><i class="bi {{ mission.icon }} fs-2 text-warning"></i><h3 class="mt-2">{{ mission.title }}</h3><p class="mb-0">{{ mission.text }}</p>{% if mission.approval == 'pending' %}<p class="pending-note mt-3 mb-0">Preview — pending approval, hidden from visitors.</p>{% endif %}</div></div>{% endif %}
+  </div>
+</div></section>{% endif %}

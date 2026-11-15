@@ -1,0 +1,8 @@
+<header class="page-hero">
+  <div class="container position-relative">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'core:home' %}">Home</a>{% for label, url in crumbs %}<span class="sep">/</span>{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span aria-current="page">{{ label }}</span>{% endif %}{% endfor %}</nav>
+    {% if eyebrow %}<span class="eyebrow">{{ eyebrow }}</span>{% endif %}
+    <h1>{{ title }}</h1>
+    {% if subtitle %}<p class="mt-3">{{ subtitle }}</p>{% endif %}
+  </div>
+</header>

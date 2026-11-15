@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}{{ item.title }} | {{ site.short_name }}{% endblock %}
+{% block meta_description %}{{ item.summary }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ item.title }}{% endblock %}
+{% block og_description %}{{ item.summary }}{% endblock %}
+{% block previewbar %}{% if preview_hidden %}<div class="preview-bar">STAFF PREVIEW — this announcement is not public yet.</div>{% endif %}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title=item.title subtitle=item.summary eyebrow=item.category.name crumbs=None %}
+<section class="section pt-4"><div class="container"><div class="row justify-content-center"><div class="col-lg-8">
+  <p class="text-muted"><i class="bi bi-calendar3 text-warning me-2"></i>{{ item.publish_at|date:"d F Y" }}{% if item.event %} · <a href="{{ item.event.get_absolute_url }}">{{ item.event.title }}</a>{% endif %}</p>
+  {% if item.image %}<img class="img-fluid rounded mb-4" src="{{ item.image.url }}" alt="">{% endif %}
+  <div class="prose">{{ item.body|safe }}</div><hr class="my-4">{% include "partials/share.html" with share_title=item.title %}
+</div></div></div></section>
+{% if others %}<section class="section alt"><div class="container"><h2 class="mb-4">More updates</h2><div class="row g-4">{% for a in others %}<div class="col-md-4">{% include "partials/news_card.html" %}</div>{% endfor %}</div></div></section>{% endif %}
+{% endblock %}

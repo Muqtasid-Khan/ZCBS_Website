@@ -1,0 +1,5 @@
+{% if objectives %}
+<section class="section dark on-dark"><div class="container">
+  <div class="section-head center reveal"><span class="eyebrow">{{ section.eyebrow }}</span><h2>{{ section.heading }}</h2><span class="rule center"></span></div>
+  <div class="row g-4">{% for o in objectives %}<div class="col-md-6 col-lg-4 reveal"><div class="value-card"><i class="bi {{ o.icon }}"></i><h3>{{ o.title }}</h3><p>{{ o.text }}</p></div></div>{% endfor %}</div>
+</div></section>{% endif %}

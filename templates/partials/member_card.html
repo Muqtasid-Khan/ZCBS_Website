@@ -1,0 +1,9 @@
+<div class="member{% if lead %} lead{% endif %}">
+  {% if m.photo %}<div class="avatar"><img src="{{ m.photo.url }}" alt="{{ m.name }}" loading="lazy"></div>
+  {% else %}<div class="avatar initials" style="--h:{{ m.avatar_hue }}" role="img" aria-label="{{ m.name }}">{{ m.initials }}</div>{% endif %}
+  <h3>{{ m.name }}</h3>
+  <div class="role">{{ m.designation }}</div>
+  <div class="cls">{{ m.academic_line }}</div>
+  {% if m.bio %}<p class="small text-muted mt-2 mb-1">{{ m.bio|truncatechars:140 }}</p>{% endif %}
+  {% if m.socials %}<div class="soc mt-2">{% for icon, url, label in m.socials %}<a href="{{ url }}" aria-label="{{ label }}" target="_blank" rel="noopener"><i class="bi {{ icon }}"></i></a>{% endfor %}</div>{% endif %}
+</div>

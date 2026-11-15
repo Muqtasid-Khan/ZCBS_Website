@@ -1,0 +1,29 @@
+{% extends "admin/index.html" %}
+{% block content %}
+<div class="zcbs-welcome">
+  <div>
+    <h2>Welcome back</h2>
+    <p>Everything on the website is managed from here. No code needed.</p>
+  </div>
+  <a class="zcbs-cta" href="{{ new_event_url }}">＋ CREATE NEW EVENT</a>
+</div>
+<div class="zcbs-grid">
+  <a class="zcbs-card" href="{% url 'admin:membership_membershipapplication_changelist' %}?status__exact=pending">
+    <b>{{ pending_applications }}</b><span>Membership applications waiting</span></a>
+  <a class="zcbs-card" href="{% url 'admin:events_event_changelist' %}?status__exact=draft">
+    <b>{{ draft_events }}</b><span>Draft events</span></a>
+  <a class="zcbs-card" href="{% url 'admin:news_announcement_changelist' %}?status__exact=draft">
+    <b>{{ draft_news }}</b><span>Draft announcements</span></a>
+  <a class="zcbs-card" href="{% url 'admin:core_contactsubmission_changelist' %}?is_handled__exact=0">
+    <b>{{ unhandled_messages }}</b><span>Unread contact messages</span></a>
+</div>
+<div class="zcbs-quick">
+  <h3>Quick actions</h3>
+  <a href="{% url 'admin:gallery_mediaitem_bulk' %}">Upload photographs</a>
+  <a href="{% url 'admin:news_announcement_add' %}">New announcement</a>
+  <a href="{% url 'admin:team_teammember_changelist' %}">Manage team</a>
+  <a href="{% url 'admin:core_homesection_changelist' %}">Edit homepage sections</a>
+  <a href="{% url 'admin:core_sitesettings_changelist' %}">Website settings & logo</a>
+</div>
+{{ block.super }}
+{% endblock %}

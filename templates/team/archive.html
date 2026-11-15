@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Previous Teams | {{ site.short_name }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Leadership archive" subtitle="Teams who served ZCBS in earlier tenures." eyebrow="Leadership transitions" crumbs=None %}
+<section class="section"><div class="container">
+{% for tenure, members in by_tenure %}<h2 class="mt-4">{{ tenure }}</h2><span class="rule"></span><div class="row g-4">{% for m in members %}<div class="col-6 col-md-4 col-lg-3">{% include "partials/member_card.html" %}</div>{% endfor %}</div>
+{% empty %}<p class="lead-text">No earlier tenures have been archived yet. When a new team takes over, change the "Tenure" of the outgoing members in the dashboard and they will appear here.</p>{% endfor %}
+</div></section>
+{% endblock %}

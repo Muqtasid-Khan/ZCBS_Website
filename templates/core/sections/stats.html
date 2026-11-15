@@ -1,0 +1,4 @@
+{% if stats %}
+<section class="section dark on-dark" style="padding:3rem 0"><div class="container"><div class="row g-0 justify-content-center">
+  {% for label, n in stats %}<div class="col-6 col-md-3"><div class="stat reveal"><b>{{ n }}</b><span>{{ label }}</span></div></div>{% endfor %}
+</div></div></section>{% endif %}

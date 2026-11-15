@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Media & Gallery | {{ site.short_name }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Media & Gallery" subtitle="Photographs and videos from ZCBS events and activities." eyebrow="Moments" crumbs=None %}
+<section class="section pt-5"><div class="container">
+  <div class="row g-4">{% for a in albums %}<div class="col-md-6 col-lg-4"><article class="card-z"><a class="media" href="{{ a.get_absolute_url }}" aria-label="{{ a.title }}">{% if a.cover_image %}<img src="{{ a.cover_image.url }}" alt="" loading="lazy">{% else %}<div class="ph"><i class="bi bi-images"></i></div>{% endif %}</a>
+    <div class="body"><h3><a href="{{ a.get_absolute_url }}">{{ a.title }}</a></h3><div class="meta"><span><i class="bi bi-images"></i>{{ a.items.count }} item{{ a.items.count|pluralize }}</span>{% if a.date %}<span><i class="bi bi-calendar3"></i>{{ a.date|date:"d M Y" }}</span>{% endif %}</div>{% if a.description %}<p>{{ a.description|truncatechars:120 }}</p>{% endif %}</div></article></div>
+  {% empty %}<div class="text-center py-5"><p class="lead-text">Albums will appear here once photographs are uploaded.</p></div>{% endfor %}</div>
+  {% if videos %}<h2 class="mt-5 mb-4">Videos</h2><div class="row g-4">{% for v in videos %}<div class="col-md-6 col-lg-4"><div class="video-wrap">{% if v.embed_url %}<iframe src="{{ v.embed_url }}" title="{{ v.caption|default:'ZCBS video' }}" loading="lazy" allowfullscreen></iframe>{% elif v.video_file %}<video src="{{ v.video_file.url }}" controls preload="metadata"></video>{% endif %}</div><p class="small text-muted mt-2">{{ v.caption }}</p></div>{% endfor %}</div>{% endif %}
+</div></section>
+{% endblock %}

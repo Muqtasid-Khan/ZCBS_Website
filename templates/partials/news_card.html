@@ -1,0 +1,9 @@
+<article class="card-z">
+  {% if a.image %}<a class="media" href="{{ a.get_absolute_url }}" tabindex="-1" aria-hidden="true"><img src="{{ a.image.url }}" alt="" loading="lazy"></a>{% endif %}
+  <div class="body">
+    <div class="meta mb-1">{% if a.is_pinned %}<span class="tag solid">Pinned</span>{% endif %}{% if a.category %}<span class="tag">{{ a.category.name }}</span>{% endif %}<span><i class="bi bi-calendar3"></i>{{ a.publish_at|date:"d M Y" }}</span></div>
+    <h3><a href="{{ a.get_absolute_url }}">{{ a.title }}</a></h3>
+    {% if a.summary %}<p>{{ a.summary|truncatechars:140 }}</p>{% endif %}
+    <a class="link-arrow more" href="{{ a.get_absolute_url }}">Read</a>
+  </div>
+</article>

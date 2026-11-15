@@ -1,0 +1,5 @@
+{% if site.membership_open %}
+<section class="section"><div class="container"><div class="cta-band reveal">
+  <div class="row align-items-center g-4"><div class="col-lg-8"><span class="eyebrow" style="color:var(--gold)">{{ section.eyebrow }}</span><h2>{{ section.heading }}</h2><p class="mb-0">{{ section.body }}</p></div>
+  <div class="col-lg-4 text-lg-end"><a class="btn btn-gold" href="{{ section.button_url|default:'/join/' }}">{{ section.button_label|default:'Apply now' }}</a></div></div>
+</div></div></section>{% endif %}

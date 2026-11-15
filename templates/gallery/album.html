@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ album.title }} | Gallery | {{ site.short_name }}{% endblock %}
+{% block meta_description %}{{ album.description|truncatechars:160 }}{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title=album.title subtitle=album.description eyebrow="Photo album" crumbs=None %}
+<section class="section pt-4"><div class="container">
+  {% if album.event %}<p><a class="link-arrow" href="{{ album.event.get_absolute_url }}">Go to the event page</a></p>{% endif %}
+  {% if cats %}<div class="mb-4"><a class="pill {% if not cat %}active{% endif %}" href="?">All</a>{% for c in cats %}<a class="pill {% if c.slug == cat %}active{% endif %}" href="?category={{ c.slug }}">{{ c.name }}</a>{% endfor %}</div>{% endif %}
+  {% if photos %}<div class="masonry">{% for p in photos %}<a href="{{ p.image.url }}" data-lightbox data-caption="{{ p.caption }}"><img src="{{ p.image.url }}" alt="{{ p.caption|default:album.title }}" loading="lazy"></a>{% endfor %}</div>{% endif %}
+  {% if videos %}<h2 class="mt-5 mb-4">Videos</h2><div class="row g-4">{% for v in videos %}<div class="col-md-6"><div class="video-wrap">{% if v.embed_url %}<iframe src="{{ v.embed_url }}" title="{{ v.caption|default:album.title }}" loading="lazy" allowfullscreen></iframe>{% elif v.video_file %}<video src="{{ v.video_file.url }}" controls preload="metadata"></video>{% endif %}</div><p class="small text-muted mt-2">{{ v.caption }}</p></div>{% endfor %}</div>{% endif %}
+  {% if not photos and not videos %}<p class="lead-text text-center py-5">This album has no published items yet.</p>{% endif %}
+</div></section>
+{% endblock %}
