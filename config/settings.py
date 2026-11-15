@@ -29,6 +29,8 @@ if not SECRET_KEY:
     else:
         raise RuntimeError("SECRET_KEY environment variable is required when DEBUG is off.")
 
+ON_VERCEL = bool(os.environ.get("VERCEL"))
+
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 RENDER_HOST = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_HOST:
@@ -36,6 +38,9 @@ if RENDER_HOST:
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 if RENDER_HOST:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_HOST}")
+if ON_VERCEL:
+    ALLOWED_HOSTS.append(".vercel.app")
+    CSRF_TRUSTED_ORIGINS.append("https://*.vercel.app")
 
 CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL", "")
 USE_CLOUDINARY = bool(CLOUDINARY_URL) and not TESTING
