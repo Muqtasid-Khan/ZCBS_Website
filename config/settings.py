@@ -92,8 +92,12 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+if ON_VERCEL and not os.environ.get("DATABASE_URL") and not TESTING:
+    raise RuntimeError("DATABASE_URL is required on Vercel (SQLite cannot be used there).")
+
 DATABASES = {"default": dj_database_url.config(
-    default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600)}
+    default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    conn_max_age=0 if ON_VERCEL else 600)}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
