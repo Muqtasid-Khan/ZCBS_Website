@@ -45,9 +45,7 @@ if ON_VERCEL:
 CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL", "")
 USE_CLOUDINARY = bool(CLOUDINARY_URL) and not TESTING
 
-INSTALLED_APPS = (
-    ["cloudinary_storage"] if USE_CLOUDINARY else []
-) + [
+INSTALLED_APPS = [
     "apps.core.admin_config.ZCBSAdminConfig",   # branded Django admin = the dashboard
     "django.contrib.auth",
     "django.contrib.contenttypes",
