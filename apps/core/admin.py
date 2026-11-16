@@ -59,7 +59,7 @@ class HomeSectionAdmin(SortableMixin, admin.ModelAdmin):
     list_editable = ["is_visible", "order"]
     ordering = ["order"]
     fieldsets = [(None, {"fields": ["key", "is_visible", "order"]}),
-                 ("Content", {"fields": ["eyebrow", "heading", "body", "button_label", "button_url", "image"]})]
+                 ("Content", {"fields": ["eyebrow", "heading", "body", "button_label", "button_url", "button2_label", "button2_url", "image"]})]
     def has_delete_permission(self, request, obj=None):
         return False
 
