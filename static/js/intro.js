@@ -40,19 +40,36 @@
   }
   raf = requestAnimationFrame(draw);
 
-  var code = intro.querySelector(".intro-code"), lines = [
-    ['<span class="k">import</span> integrity, leadership', 0],
-    ['character.<span class="k">build</span>()  <span class="ok">// ready</span>', 0]];
+  // The two typed lines are edited in the dashboard (Website settings -> Opening intro).
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function highlight(s) {
+    var c = s.indexOf("//"), comment = "";
+    if (c >= 0) { comment = s.slice(c); s = s.slice(0, c); }
+    var out = esc(s).replace(/\b(import|from|def|class|return|build)\b/g, '<span class="k">$1</span>');
+    return comment ? out + '<span class="ok">' + esc(comment) + '</span>' : out;
+  }
+  var code = intro.querySelector(".intro-code"), lines = [];
+  [intro.getAttribute("data-line1"), intro.getAttribute("data-line2")].forEach(function (t) {
+    t = (t || "").replace(/^\s+|\s+$/g, ""); if (t) lines.push(highlight(t));
+  });
+  if (!lines.length) { LOGO_AT = 900; END_AT = 5000; }
   var li = 0, ci = 0, html = "";
   function type() {
-    if (done) return;
-    var raw = lines[li][0].replace(/<[^>]+>/g, ""), full = lines[li][0];
-    // type by revealing characters of the visible text while keeping tags intact
-    var out = "", vis = 0, inTag = false;
-    for (var j = 0; j < full.length && vis <= ci; j++) { var c = full[j]; out += c; if (c === "<") inTag = true; else if (c === ">") inTag = false; else if (!inTag) vis++; }
+    if (done || !lines.length) return;
+    var toks = lines[li].match(/<[^>]+>|&[a-z]+;|[\s\S]/g) || [], total = 0, out = "", vis = 0, j;
+    for (j = 0; j < toks.length; j++) if (toks[j].charAt(0) !== "<") total++;
+    for (j = 0; j < toks.length; j++) {
+      var tk = toks[j];
+      if (tk.charAt(0) === "<") { out += tk; continue; }
+      if (vis >= ci) break;
+      out += tk; vis++;
+    }
     code.innerHTML = html + out + '<span class="caret"></span>';
-    if (ci < raw.length) { ci++; setTimeout(type, TYPE_SPEED); }
-    else { html += full + "<br>"; li++; ci = 0; if (li < lines.length) setTimeout(type, LINE_PAUSE); else code.innerHTML = html + '<span class="caret"></span>'; }
+    if (ci < total) { ci++; setTimeout(type, TYPE_SPEED); }
+    else {
+      html += lines[li] + "<br>"; li++; ci = 0;
+      if (li < lines.length) setTimeout(type, LINE_PAUSE); else code.innerHTML = html + '<span class="caret"></span>';
+    }
   }
   setTimeout(type, 500);
   var t1 = setTimeout(function () { intro.classList.add("show-logo"); }, LOGO_AT);
