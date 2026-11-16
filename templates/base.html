@@ -51,7 +51,7 @@
   <div class="container">
     <div class="row g-5">
       <div class="col-lg-4">
-        <img src="{% static 'brand/zcbs-logo-horizontal-light.svg' %}" alt="{{ site.site_name }}" style="max-width:300px;width:100%" class="mb-3" loading="lazy">
+                {% if site.footer_logo %}<img src="{{ site.footer_logo.url }}" alt="{{ site.site_name }}" style="max-width:300px;width:100%;height:auto" class="mb-3" loading="lazy">{% else %}<img src="{% static 'brand/zcbs-logo-horizontal-light.svg' %}" alt="{{ site.site_name }}" style="max-width:300px;width:100%" class="mb-3" loading="lazy">{% endif %}
         <p>{{ site.footer_text }}</p>
         {% if site.socials %}<div class="social mt-3">{% for s in site.socials %}<a href="{{ s.url }}" target="_blank" rel="noopener" aria-label="{{ s.name|title }}"><i class="bi {{ s.icon }}"></i></a>{% endfor %}</div>{% endif %}
       </div>
