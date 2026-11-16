@@ -199,3 +199,19 @@ body.intro-done .hero .reveal-hero:nth-child(2){transition-delay:.12s}body.intro
 .site-nav .nav-link[href$="/login/"]{border:1px solid var(--gold);border-radius:2px;color:var(--gold);margin-left:.8rem;padding:.45rem 1rem!important}
 .site-nav .nav-link[href$="/login/"]:hover{background:var(--gold);color:var(--navy)}
 @media(max-width:991px){.site-nav .nav-link[href$="/login/"]{display:inline-block;margin:.6rem 0 .3rem}}
+
+/* ---- Responsive hardening (phones, tablets, desktops) ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-x:clip}
+img,svg,video,iframe{max-width:100%}
+h1,h2,h3,h4,h5,p,li,a,td,th,.eyebrow,.role,.btn{overflow-wrap:break-word}
+.prose{overflow-wrap:break-word}.prose img{max-width:100%;height:auto}
+.prose table{display:block;max-width:100%;overflow-x:auto}
+.value-card h3{font-size:clamp(.95rem,4.2vw,1.3rem);overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:575.98px){
+  .row.g-5{--bs-gutter-x:1.5rem;--bs-gutter-y:2rem}
+  .value-card{padding:1.2rem 1rem}
+  .form-control,.form-select{font-size:16px}
+  .btn{padding-left:1.1rem;padding-right:1.1rem}
+  .site-footer .social a{margin-right:.4rem}
+}
