@@ -85,7 +85,8 @@ class SiteSettings(models.Model):
     def socials(self):
         items = [("facebook", "bi-facebook", self.facebook_url), ("instagram", "bi-instagram", self.instagram_url),
                  ("linkedin", "bi-linkedin", self.linkedin_url), ("youtube", "bi-youtube", self.youtube_url),
-                 ("x", "bi-twitter-x", self.x_url), ("whatsapp", "bi-whatsapp", self.whatsapp_url)]
+                 ("x", "bi-twitter-x", self.x_url), ("whatsapp", "bi-whatsapp", self.whatsapp_url),
+                 ("tiktok", "bi-tiktok", self.tiktok_url)]
         return [{"name": n, "icon": i, "url": u} for n, i, u in items if u]
 
 
