@@ -32,7 +32,8 @@ export_csv.short_description = "Export selected to CSV (Excel)"
 class SiteSettingsAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Identity", {"fields": ["site_name", "short_name", "chapter_line", "institution", "tagline"]}),
-        ("Logo & colours", {"fields": ["logo", "favicon", "primary_color", "accent_color"]}),
+                ("Logo & colours", {"fields": ["logo", "footer_logo", "hero_emblem", "favicon", "primary_color", "accent_color"]}),
+        ("Opening intro (text & logo)", {"fields": ["intro_line_1", "intro_line_2", "intro_logo"]}),
         ("Contact details", {"fields": ["contact_email", "contact_phone", "address", "map_embed_url", "contact_intro"]}),
         ("Social media", {"fields": ["facebook_url", "instagram_url", "linkedin_url", "youtube_url", "x_url", "whatsapp_url", "tiktok_url"]}),
         ("Search engines & sharing (SEO)", {"fields": ["seo_title", "seo_description", "og_image", "analytics_id"]}),
