@@ -193,3 +193,9 @@ body.intro-done .hero .reveal-hero:nth-child(2){transition-delay:.12s}body.intro
   html:not(.no-intro) .hero .reveal-hero{opacity:1;transform:none}
 }
 @media print{.site-nav,.site-footer,#intro,.share,.hero-scroll{display:none!important}body{background:#fff}.no-hero main{padding-top:0}}
+
+
+/* Admin Login button in the top menu (a Menu link whose address ends in /login/) */
+.site-nav .nav-link[href$="/login/"]{border:1px solid var(--gold);border-radius:2px;color:var(--gold);margin-left:.8rem;padding:.45rem 1rem!important}
+.site-nav .nav-link[href$="/login/"]:hover{background:var(--gold);color:var(--navy)}
+@media(max-width:991px){.site-nav .nav-link[href$="/login/"]{display:inline-block;margin:.6rem 0 .3rem}}
