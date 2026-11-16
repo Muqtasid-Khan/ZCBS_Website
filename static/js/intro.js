@@ -1,9 +1,11 @@
-/* Cinematic intro: ~5 seconds, skippable, respects reduced motion, plays once per visitor if enabled.
+/* Cinematic intro: ~10 seconds, skippable, respects reduced motion, plays once per visitor if enabled.
    The only thing remembered is a flag in the visitor's own browser (localStorage); nothing is sent anywhere. */
 (function () {
   "use strict";
   var intro = document.getElementById("intro");
   if (!intro) return;
+  // Timing (milliseconds). Raise a number to make that part slower.
+  var TYPE_SPEED = 65, LINE_PAUSE = 700, LOGO_AT = 5600, END_AT = 9600, ARCH_SECONDS = 5.5;
   var once = intro.getAttribute("data-once") === "1";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var seen = false;
@@ -19,7 +21,7 @@
   function draw(now) {
     var t = (now - t0) / 1000; ctx.clearRect(0, 0, W, H);
     // architectural arch lines drawing in
-    var cx = W / 2, base = H * .86, aw = Math.min(W * .34, 330), prog = Math.min(1, t / 2.6);
+    var cx = W / 2, base = H * .86, aw = Math.min(W * .34, 330), prog = Math.min(1, t / ARCH_SECONDS);
     ctx.strokeStyle = "rgba(201,162,75," + (.18 + .25 * prog) + ")"; ctx.lineWidth = 1;
     for (var k = 0; k < 4; k++) {
       var w = aw * (1 + k * .38), h = w * 1.05, p = Math.max(0, Math.min(1, prog * 1.4 - k * .18));
@@ -49,12 +51,12 @@
     var out = "", vis = 0, inTag = false;
     for (var j = 0; j < full.length && vis <= ci; j++) { var c = full[j]; out += c; if (c === "<") inTag = true; else if (c === ">") inTag = false; else if (!inTag) vis++; }
     code.innerHTML = html + out + '<span class="caret"></span>';
-    if (ci < raw.length) { ci++; setTimeout(type, 28); }
-    else { html += full + "<br>"; li++; ci = 0; if (li < lines.length) setTimeout(type, 260); else code.innerHTML = html + '<span class="caret"></span>'; }
+    if (ci < raw.length) { ci++; setTimeout(type, TYPE_SPEED); }
+    else { html += full + "<br>"; li++; ci = 0; if (li < lines.length) setTimeout(type, LINE_PAUSE); else code.innerHTML = html + '<span class="caret"></span>'; }
   }
   setTimeout(type, 500);
-  var t1 = setTimeout(function () { intro.classList.add("show-logo"); }, 2500);
-  var t2 = setTimeout(leave, 4800);
+  var t1 = setTimeout(function () { intro.classList.add("show-logo"); }, LOGO_AT);
+  var t2 = setTimeout(leave, END_AT);
   function leave() {
     if (done) return; done = true; clearTimeout(t1); clearTimeout(t2); cancelAnimationFrame(raf);
     try { localStorage.setItem("zcbs_intro_seen", "1"); } catch (e) {}
