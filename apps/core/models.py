@@ -114,7 +114,11 @@ class HomeSection(models.Model):
     heading = models.CharField(max_length=200, blank=True)
     body = models.TextField(blank=True)
     button_label = models.CharField(max_length=60, blank=True)
-    button_url = models.CharField(max_length=300, blank=True, help_text="Page path like /about/ or a full web address.")
+        button_url = models.CharField(max_length=300, blank=True, help_text="Page path like /about/ or a full web address.")
+    button2_label = models.CharField("Second button label (Hero only)", max_length=60, blank=True, default="Explore events",
+                                     help_text="Used by the Hero (top banner) only. Leave empty to hide the second button.")
+    button2_url = models.CharField("Second button link (Hero only)", max_length=300, blank=True, default="/events/",
+                                   help_text="Page path like /events/ or a full web address.")
     image = models.ImageField(upload_to="home/", blank=True, validators=[validate_image_file],
                               help_text="Optional picture for this section (used by Hero and About).")
     is_visible = models.BooleanField(default=True)
