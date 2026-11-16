@@ -34,7 +34,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ("Identity", {"fields": ["site_name", "short_name", "chapter_line", "institution", "tagline"]}),
         ("Logo & colours", {"fields": ["logo", "favicon", "primary_color", "accent_color"]}),
         ("Contact details", {"fields": ["contact_email", "contact_phone", "address", "map_embed_url", "contact_intro"]}),
-        ("Social media", {"fields": ["facebook_url", "instagram_url", "linkedin_url", "youtube_url", "x_url", "whatsapp_url"]}),
+        ("Social media", {"fields": ["facebook_url", "instagram_url", "linkedin_url", "youtube_url", "x_url", "whatsapp_url", "tiktok_url"]}),
         ("Search engines & sharing (SEO)", {"fields": ["seo_title", "seo_description", "og_image", "analytics_id"]}),
         ("Footer & features", {"fields": ["footer_text", "enable_intro", "intro_once_per_visitor", "show_stats",
                                           "membership_open", "membership_intro", "newsletter_enabled",
