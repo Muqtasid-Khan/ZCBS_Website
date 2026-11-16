@@ -19,7 +19,17 @@ class SiteSettings(models.Model):
     logo = models.ImageField("Logo override", upload_to="branding/", blank=True, validators=[validate_image_file],
                              help_text="Optional. Leave empty to use the built-in ZCBS logo. Use a PNG with transparent background.")
     favicon = models.ImageField("Favicon override", upload_to="branding/", blank=True, validators=[validate_image_file],
-                                help_text="Optional square image (PNG), at least 128×128.")
+                                                                help_text="Optional square image (PNG), at least 128×128.")
+    footer_logo = models.ImageField("Footer logo override", upload_to="branding/", blank=True, validators=[validate_image_file],
+                                    help_text="Optional. Leave empty to use the built-in footer logo. Use a PNG with a transparent background that looks good on dark navy.")
+    hero_emblem = models.ImageField("Homepage banner emblem", upload_to="branding/", blank=True, validators=[validate_image_file],
+                                    help_text="Optional. The large picture beside the headline in the homepage top banner (shown on larger screens). Leave empty to use the built-in emblem. Use a PNG with a transparent background.")
+    intro_logo = models.ImageField("Intro logo override", upload_to="branding/", blank=True, validators=[validate_image_file],
+                                   help_text="Optional. The logo shown at the end of the opening intro. Leave empty to use the built-in logo. Use a PNG with a transparent background that looks good on dark navy.")
+    intro_line_1 = models.CharField("Intro typing line 1", max_length=60, blank=True, default="import integrity, leadership",
+                                    help_text="First line typed in the opening intro. Leave both lines empty to show only the logo.")
+    intro_line_2 = models.CharField("Intro typing line 2", max_length=60, blank=True, default="character.build()  // ready",
+                                    help_text="Second line typed in the opening intro. Anything after // is shown in green.")
     # Colours
     primary_color = models.CharField(max_length=7, default="#0B1B2E", validators=[hex_color],
                                      help_text="Main dark colour (navy) used on the hero, footer and headings.")
