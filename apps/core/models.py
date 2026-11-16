@@ -38,6 +38,7 @@ class SiteSettings(models.Model):
     youtube_url = models.URLField(blank=True)
     x_url = models.URLField("X (Twitter) URL", blank=True)
     whatsapp_url = models.URLField("WhatsApp channel/group URL", blank=True)
+    tiktok_url = models.URLField("TikTok URL", blank=True)
     # SEO
     seo_title = models.CharField(max_length=70, blank=True, help_text="Browser/Google title for the homepage.")
     seo_description = models.CharField(max_length=170, blank=True)
