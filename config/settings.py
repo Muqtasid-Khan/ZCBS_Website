@@ -173,7 +173,7 @@ EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND") or (
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL") or (
     f"ZCBS <{EMAIL_HOST_USER}>" if EMAIL_HOST_USER else "webmaster@localhost")
 SITE_URL = os.environ.get("SITE_URL", "").rstrip("/")   # e.g. https://zcbs-website-47v7.vercel.app
-
+GOOGLE_SITE_VERIFICATION = os.environ.get("GOOGLE_SITE_VERIFICATION", "").strip()   # code from Google Search Console
 # --- Rich text editor ---------------------------------------------------------
 CKEDITOR_5_CONFIGS = {
     "default": {
