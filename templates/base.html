@@ -14,6 +14,8 @@
 <meta property="og:image" content="{% block og_image %}{% if site.og_image %}{{ request.scheme }}://{{ request.get_host }}{{ site.og_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'brand/og-card.png' %}{% endif %}{% endblock %}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% if google_verification %}<meta name="google-site-verification" content="{{ google_verification }}">{% endif %}
+<script type="application/ld+json">{{ search_jsonld }}</script>
 {% if site.favicon %}<link rel="icon" href="{{ site.favicon.url }}">{% else %}<link rel="icon" href="{% static 'brand/favicon.svg' %}" type="image/svg+xml"><link rel="icon" href="{% static 'brand/favicon.ico' %}" sizes="any">{% endif %}
 <link rel="apple-touch-icon" href="{% static 'brand/apple-touch-icon.png' %}">
 <script>(function(){var d=document.documentElement;d.classList.remove("no-js");try{var r=window.matchMedia("(prefers-reduced-motion: reduce)").matches;var s=localStorage.getItem("zcbs_intro_seen")==="1";if(r||({{ site.intro_once_per_visitor|yesno:"true,false" }}&&s)){d.classList.add("no-intro")}}catch(e){}})();</script>
