@@ -160,7 +160,7 @@ class Event(models.Model):
         return self.cover_image or self.poster or None
 
     def related(self, limit=3):
-        manual = list(self.related_events.visible()[:limit])
+        manual = list(self.related_events.visible().exclude(pk=self.pk)[:limit])
         if len(manual) >= limit:
             return manual
         extra = (Event.objects.live().filter(category=self.category).exclude(pk=self.pk)
