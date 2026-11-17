@@ -215,23 +215,15 @@ h1,h2,h3,h4,h5,p,li,a,td,th,.eyebrow,.role,.btn{overflow-wrap:break-word}
   .btn{padding-left:1.1rem;padding-right:1.1rem}
   .site-footer .social a{margin-right:.4rem}
 }
-/* ---- Custom cursor: navy hand with gold edge ---- */
-html {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M12 27L6 18.5Q4.5 16 6.5 14.5Q8.5 13 10 15L13 18V7Q13 4.5 15.5 4.5Q18 4.5 18 7V14H20V10Q20 7.5 22.5 7.5Q25 7.5 25 10V14Q28 12.5 29 16L28 23Q27 28 22 28H15Z' fill='%230B1B2E' stroke='%23C9A24B' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 13 5, auto;
+/* ---- ZCBS Signature Cursor: Minimal Royal Pointer ---- */
+
+html, body {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M5 2.5L18.5 17L11 15.5L8 22Z' fill='%230B1B2E' stroke='%23C9A24B' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 2, auto;
 }
 
-/* ---- Gold hand cursor on interactive elements ---- */
-a,
-button,
-summary,
-select,
-label[for],
-[role="button"],
-.btn,
-.navbar-toggler,
-input[type="submit"],
-input[type="button"],
-input[type="checkbox"],
-input[type="radio"] {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M12 27L6 18.5Q4.5 16 6.5 14.5Q8.5 13 10 15L13 18V7Q13 4.5 15.5 4.5Q18 4.5 18 7V14H20V10Q20 7.5 22.5 7.5Q25 7.5 25 10V14Q28 12.5 29 16L28 23Q27 28 22 28H15Z' fill='%23C9A24B' stroke='%230B1B2E' stroke-width='1.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") 13 5, pointer !important;
+/* Refined gold interaction cursor */
+a, button, summary, select,
+[role="button"], .btn, .navbar-toggler,
+input[type="submit"], input[type="button"] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M5 2.5L18.5 17L11 15.5L8 22Z' fill='%23C9A24B' stroke='%230B1B2E' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") 5 2, pointer !important;
 }
