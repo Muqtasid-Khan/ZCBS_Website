@@ -8,7 +8,15 @@ IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 VIDEO_EXT = {".mp4", ".webm", ".mov", ".m4v"}
 
 
+def _already_saved(f):
+    """True for a file that is already stored (e.g. on Cloudinary, whose names have no extension).
+    Only brand-new uploads are checked; re-saving a form must not re-validate stored files."""
+    return bool(getattr(f, "_committed", False))
+
+
 def validate_image_file(f):
+    if _already_saved(f):
+        return
     ext = os.path.splitext(f.name)[1].lower()
     if ext not in IMAGE_EXT:
         raise ValidationError("Unsupported image type. Use JPG, PNG, WebP or GIF.")
@@ -18,6 +26,8 @@ def validate_image_file(f):
 
 
 def validate_video_file(f):
+    if _already_saved(f):
+        return
     ext = os.path.splitext(f.name)[1].lower()
     if ext not in VIDEO_EXT:
         raise ValidationError("Unsupported video type. Use MP4, WebM or MOV (or paste a YouTube/Vimeo link instead).")
