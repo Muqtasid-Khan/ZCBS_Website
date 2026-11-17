@@ -19,7 +19,7 @@ class SiteSettings(models.Model):
     logo = models.ImageField("Logo override", upload_to="branding/", blank=True, validators=[validate_image_file],
                              help_text="Optional. Leave empty to use the built-in ZCBS logo. Use a PNG with transparent background.")
     favicon = models.ImageField("Favicon override", upload_to="branding/", blank=True, validators=[validate_image_file],
-                                                                help_text="Optional square image (PNG), at least 128×128.")
+                                help_text="Optional square image (PNG), at least 128×128.")
     footer_logo = models.ImageField("Footer logo override", upload_to="branding/", blank=True, validators=[validate_image_file],
                                     help_text="Optional. Leave empty to use the built-in footer logo. Use a PNG with a transparent background that looks good on dark navy.")
     hero_emblem = models.ImageField("Homepage banner emblem", upload_to="branding/", blank=True, validators=[validate_image_file],
@@ -114,7 +114,7 @@ class HomeSection(models.Model):
     heading = models.CharField(max_length=200, blank=True)
     body = models.TextField(blank=True)
     button_label = models.CharField(max_length=60, blank=True)
-        button_url = models.CharField(max_length=300, blank=True, help_text="Page path like /about/ or a full web address.")
+    button_url = models.CharField(max_length=300, blank=True, help_text="Page path like /about/ or a full web address.")
     button2_label = models.CharField("Second button label (Hero only)", max_length=60, blank=True, default="Explore events",
                                      help_text="Used by the Hero (top banner) only. Leave empty to hide the second button.")
     button2_url = models.CharField("Second button link (Hero only)", max_length=300, blank=True, default="/events/",
