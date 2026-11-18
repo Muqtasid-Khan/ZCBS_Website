@@ -14,26 +14,36 @@
   if (reduce || (once && seen)) { finishNow(); return; }
 
   document.body.classList.add("intro-active");
+  // Ring/particle colour follows the site's gold (Website settings -> accent colour).
+  function goldRgb() {
+    var v = (getComputedStyle(document.documentElement).getPropertyValue("--gold") || "").trim();
+    var m = /^#([0-9a-f]{6})$/i.exec(v);
+    return m ? [parseInt(m[1].slice(0, 2), 16), parseInt(m[1].slice(2, 4), 16), parseInt(m[1].slice(4, 6), 16)] : [210, 161, 58];
+  }
+  var logoImg = intro.querySelector(".intro-logo img"), logoY = 0, blend = 0;
+  var G = goldRgb(), GOLD = G.join(","), SPARK = G.map(function (c) { return Math.round(c + (255 - c) * .46); }).join(",");
   var canvas = intro.querySelector("canvas"), ctx = canvas.getContext("2d"), W, H, raf, t0 = performance.now(), done = false, parts = [];
   function size() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   size(); window.addEventListener("resize", size);
   for (var i = 0; i < 70; i++) parts.push({x: Math.random(), y: Math.random(), s: Math.random() * 1.4 + .3, v: Math.random() * .00008 + .00002});
   function draw(now) {
     var t = (now - t0) / 1000; ctx.clearRect(0, 0, W, H);
-    // architectural arch lines drawing in
-    var cx = W / 2, base = H * .86, aw = Math.min(W * .34, 330), prog = Math.min(1, t / ARCH_SECONDS);
-    ctx.strokeStyle = "rgba(201,162,75," + (.18 + .25 * prog) + ")"; ctx.lineWidth = 1;
+    // concentric rings (the seal's outer boundary) drawing in around the centre
+    var cx = W / 2, cy = H * .5, rb = Math.min(W, H) * .2, prog = Math.min(1, t / ARCH_SECONDS);
+    // once the logo is showing, glide the rings so they sit exactly around it
+    if (logoImg && intro.classList.contains("show-logo")) {
+      var rc = logoImg.getBoundingClientRect();
+      if (rc.height) { logoY = rc.top + rc.height / 2; blend = Math.min(1, blend + .03); }
+    }
+    cy = H * .5 + (logoY - H * .5) * blend;
+    ctx.strokeStyle = "rgba(" + GOLD + "," + (.18 + .25 * prog) + ")"; ctx.lineWidth = 1;
     for (var k = 0; k < 4; k++) {
-      var w = aw * (1 + k * .38), h = w * 1.05, p = Math.max(0, Math.min(1, prog * 1.4 - k * .18));
-      ctx.beginPath(); ctx.moveTo(cx - w, base);
-      var total = h * 2 + Math.PI * w, run = total * p, seg;
-      seg = Math.min(run, h); ctx.lineTo(cx - w, base - seg); run -= seg;
-      if (run > 0) { var ang = Math.min(Math.PI, run / w); ctx.arc(cx, base - h, w, Math.PI, Math.PI + ang); run -= ang * w; }
-      if (run > 0) { ctx.moveTo(cx + w, base - h); ctx.lineTo(cx + w, base - h + Math.min(run, h)); }
-      ctx.stroke();
+      var r = rb * (1 + k * .42), p = Math.max(0, Math.min(1, prog * 1.4 - k * .18));
+      if (p <= 0) continue;
+      ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); ctx.stroke();
     }
     // drifting particles
-    ctx.fillStyle = "rgba(230,210,154,.55)";
+    ctx.fillStyle = "rgba(" + SPARK + ",.55)";
     parts.forEach(function (p) { p.y -= p.v * 16; if (p.y < 0) p.y = 1; ctx.globalAlpha = .25 + .5 * Math.abs(Math.sin(t + p.x * 9)); ctx.beginPath(); ctx.arc(p.x * W, p.y * H, p.s, 0, 6.283); ctx.fill(); });
     ctx.globalAlpha = 1;
     if (!done) raf = requestAnimationFrame(draw);
