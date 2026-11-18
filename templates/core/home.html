@@ -6,7 +6,7 @@
   <canvas aria-hidden="true"></canvas>
   <div class="intro-inner">
     <div class="intro-code" aria-hidden="true"></div>
-    <div class="intro-logo"><img src="{% if site.intro_logo %}{{ site.intro_logo.url }}{% else %}{% static 'brand/zcbs-logo-primary-light.svg' %}{% endif %}" alt="{{ site.site_name }}"></div>
+    <div class="intro-logo{% if site.intro_logo %} custom{% endif %}"><img src="{% if site.intro_logo %}{{ site.intro_logo.url }}{% else %}{% static 'brand/zcbs-logo-primary-light.svg' %}{% endif %}" alt="{{ site.site_name }}">{% if site.intro_logo %}<div class="intro-caption"><b>{{ site.short_name }}</b><i></i><span>{{ site.site_name }}</span><small>{{ site.chapter_line }} | {{ site.institution }}</small></div>{% endif %}</div>
   </div>
   <button class="intro-skip" type="button">Skip intro</button>
 </div>
