@@ -13,7 +13,7 @@
           {% if section.button2_label %}<a class="btn btn-outline-gold" href="{{ section.button2_url|default:'/events/' }}">{{ section.button2_label }}</a>{% endif %}
         </div>
       </div>
-      <div class="col-lg-5 text-center d-none d-lg-block reveal-hero"><img class="hero-emblem" src="{% if site.hero_emblem %}{{ site.hero_emblem.url }}{% else %}{% static 'brand/zcbs-emblem.svg' %}{% endif %}" alt=""></div>
+      <div class="col-lg-5 text-center d-none d-lg-block reveal-hero"><div class="hero-seal"><svg class="hero-rings" viewBox="-300 -300 600 600" aria-hidden="true"><circle r="150"/><circle r="188"/><circle r="230"/><circle r="278"/></svg><img class="hero-emblem" src="{% if site.hero_emblem %}{{ site.hero_emblem.url }}{% else %}{% static 'brand/zcbs-emblem.svg' %}{% endif %}" alt=""></div></div>
     </div>
   </div>
   <a class="hero-scroll" href="#after-hero" aria-label="Scroll down"><i class="bi bi-chevron-double-down"></i></a>
