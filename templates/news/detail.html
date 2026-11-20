@@ -4,6 +4,8 @@
 {% block og_type %}article{% endblock %}
 {% block og_title %}{{ item.title }}{% endblock %}
 {% block og_description %}{{ item.summary }}{% endblock %}
+{% block twitter_title %}{{ item.title }}{% endblock %}
+{% block twitter_description %}{{ item.summary }}{% endblock %}
 {% block previewbar %}{% if preview_hidden %}<div class="preview-bar">STAFF PREVIEW — this announcement is not public yet.</div>{% endif %}{% endblock %}
 {% block content %}
 {% include "partials/page_header.html" with title=item.title subtitle=item.summary eyebrow=item.category.name crumbs=None %}

@@ -12,7 +12,7 @@ from apps.team.models import TeamCategory, TeamMember
 
 from .forms import ContactForm, NewsletterForm
 from .models import ContentBlock, HomeSection, NewsletterSubscriber, PageContent, SiteSettings
-from .utils import rate_limited, visible_blocks
+from .utils import rate_limited, site_base_url, visible_blocks
 
 
 def home(request):
@@ -107,8 +107,18 @@ def newsletter(request):
 
 def robots_txt(request):
     from django.conf import settings
-    lines = ["User-agent: *", f"Disallow: /{settings.ADMIN_URL}", f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}"]
+    lines = ["User-agent: *", "Allow: /",
+             f"Disallow: /{settings.ADMIN_URL}", "Disallow: /ckeditor5/",
+             "", f"Sitemap: {site_base_url(request)}/sitemap.xml", ""]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def favicon_ico(request):
+    """Google and browsers also ask for /favicon.ico directly; send them to the real icon."""
+    from django.contrib.staticfiles.storage import staticfiles_storage
+    s = SiteSettings.load()
+    target = s.favicon.url if s.favicon else staticfiles_storage.url("brand/favicon.ico")
+    return redirect(target)
 
 
 def error_404(request, exception=None):

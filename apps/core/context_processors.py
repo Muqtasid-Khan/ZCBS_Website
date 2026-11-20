@@ -6,16 +6,17 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 from .models import NavItem, SiteSettings
+from .utils import absolute_url, site_base_url
 
 
 def _search_data(request, s):
     """Structured data (JSON-LD) that tells Google who ZCBS is: name, alternative names, logo, social profiles."""
-    home = request.build_absolute_uri("/")
+    home = site_base_url(request) + "/"
     names = [n for n in [s.short_name, f"{s.short_name} {s.chapter_line}".strip()] if n]
     organization = {
         "@type": "Organization", "@id": home + "#organization",
         "name": s.site_name, "alternateName": names, "url": home,
-        "logo": request.build_absolute_uri(static("brand/favicon-512.png")),
+        "logo": absolute_url(request, static("brand/favicon-512.png")),
     }
     if s.seo_description:
         organization["description"] = s.seo_description
@@ -42,5 +43,7 @@ def site(request):
         "current_year": timezone.now().year,
         "is_preview": request.user.is_authenticated and request.user.is_staff,
         "search_jsonld": _search_data(request, s),
+        "site_base_url": site_base_url(request),
+        "canonical_url": site_base_url(request) + request.path,
         "google_verification": getattr(settings, "GOOGLE_SITE_VERIFICATION", ""),
     }

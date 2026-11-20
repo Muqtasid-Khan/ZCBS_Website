@@ -48,10 +48,11 @@ def _get_event(request, slug):
 
 def _jsonld(request, ev):
     import json
+    from apps.core.utils import absolute_url, site_base_url
     data = {"@context": "https://schema.org", "@type": "Event", "name": ev.title,
             "description": ev.summary or ev.tagline,
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-            "url": request.build_absolute_uri(ev.get_absolute_url())}
+            "url": site_base_url(request) + ev.get_absolute_url()}
     if ev.start_at:
         data["startDate"] = ev.start_at.isoformat()
     if ev.end_at:
@@ -59,7 +60,7 @@ def _jsonld(request, ev):
     if ev.venue:
         data["location"] = {"@type": "Place", "name": ev.venue}
     if ev.card_image:
-        data["image"] = request.build_absolute_uri(ev.card_image.url)
+        data["image"] = absolute_url(request, ev.card_image.url)
     # "</" must never appear inside a <script> block
     return json.dumps(data).replace("</", "<\\/")
 

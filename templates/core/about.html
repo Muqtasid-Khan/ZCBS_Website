@@ -1,6 +1,8 @@
 {% extends "base.html" %}
-{% block title %}About ZCBS | {{ site.short_name }}{% endblock %}
-{% block meta_description %}{% if page.seo_description %}{{ page.seo_description }}{% else %}{{ site.seo_description }}{% endif %}{% endblock %}
+{% block title %}About ZCBS | Zakariyan Character Building Society, BZU Multan{% endblock %}
+{% block og_title %}About ZCBS | Zakariyan Character Building Society, BZU Multan{% endblock %}
+{% block twitter_title %}About ZCBS | Zakariyan Character Building Society, BZU Multan{% endblock %}
+{% block meta_description %}{% if page.seo_description %}{{ page.seo_description }}{% else %}Learn about ZCBS, the Zakariyan Character Building Society of the CASPAM chapter at Bahauddin Zakariya University, Multan: our vision, mission, objectives and core values.{% endif %}{% endblock %}
 {% block content %}
 {% include "partials/page_header.html" with title=page.title|default:"About ZCBS" subtitle=page.subtitle eyebrow="Who we are" crumbs=None %}
 <div class="container pt-3">{% if has_pending %}<div class="pending-note">Preview for administrators: items marked "pending approval" are hidden from visitors until you approve them in the dashboard.</div>{% endif %}</div>

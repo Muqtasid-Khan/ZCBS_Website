@@ -24,3 +24,20 @@ def visible_blocks(qs, request, site):
     if site.show_pending_publicly:
         return qs
     return qs.filter(approval="approved")
+
+
+def site_base_url(request):
+    """Public address of the website with no trailing slash.
+    Uses the SITE_URL setting when it is set, so Google always sees ONE address
+    (and not a preview/deployment address); otherwise the address of the request."""
+    configured = getattr(settings, "SITE_URL", "")
+    return configured if configured else f"{request.scheme}://{request.get_host()}"
+
+
+def absolute_url(request, url):
+    """Turn "/static/x.png" into a full address; leave full addresses (e.g. Cloudinary) alone."""
+    if not url:
+        return ""
+    if url.startswith(("http://", "https://")):
+        return url
+    return site_base_url(request) + url

@@ -15,6 +15,7 @@ urlpatterns = [
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
     path("robots.txt", core_views.robots_txt, name="robots"),
+    path("favicon.ico", core_views.favicon_ico, name="favicon"),
     path("", include("apps.core.urls")),
     path("team/", include("apps.team.urls")),
     path("events/", include("apps.events.urls")),

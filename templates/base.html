@@ -1,4 +1,4 @@
-{% load static %}<!doctype html>
+{% load static seo %}<!doctype html>
 <html lang="en" class="no-js{% if not site.enable_intro or request.path != '/' %} no-intro{% endif %}">
 <head>
 <meta charset="utf-8">
@@ -6,15 +6,18 @@
 <meta name="google-site-verification" content="CGeKAq_ciboadLGMgfEXVqTOdrTfHcFx2VsemdIOyUk" />
 <title>{% block title %}{{ site.seo_title|default:site.site_name }}{% endblock %}</title>
 <meta name="description" content="{% block meta_description %}{{ site.seo_description }}{% endblock %}">
+{% block robots %}{% endblock %}
 <meta name="theme-color" content="{{ site.primary_color }}">
 <meta property="og:site_name" content="{{ site.site_name }}">
 <meta property="og:type" content="{% block og_type %}website{% endblock %}">
 <meta property="og:title" content="{% block og_title %}{{ site.seo_title|default:site.site_name }}{% endblock %}">
 <meta property="og:description" content="{% block og_description %}{{ site.seo_description }}{% endblock %}">
-<meta property="og:url" content="{{ request.build_absolute_uri }}">
-<meta property="og:image" content="{% block og_image %}{% if site.og_image %}{{ request.scheme }}://{{ request.get_host }}{{ site.og_image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'brand/og-card.png' %}{% endif %}{% endblock %}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:image" content="{% block og_image %}{% if site.og_image %}{% abs_url site.og_image.url %}{% else %}{% static 'brand/og-card.png' as og_default %}{% abs_url og_default %}{% endif %}{% endblock %}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="{{ request.build_absolute_uri }}">
+<meta name="twitter:title" content="{% block twitter_title %}{{ site.seo_title|default:site.site_name }}{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_description %}{{ site.seo_description }}{% endblock %}">
+<link rel="canonical" href="{{ canonical_url }}">
 {% if google_verification %}<meta name="google-site-verification" content="{{ google_verification }}">{% endif %}
 <script type="application/ld+json">{{ search_jsonld }}</script>
 {% if site.favicon %}<link rel="icon" href="{{ site.favicon.url }}">{% else %}<link rel="icon" href="{% static 'brand/favicon.svg' %}" type="image/svg+xml"><link rel="icon" href="{% static 'brand/favicon.ico' %}" sizes="any">{% endif %}
