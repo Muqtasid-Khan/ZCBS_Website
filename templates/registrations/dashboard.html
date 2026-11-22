@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Home</a> › Event registrations</div>{% endblock %}
+{% block content %}
+<p>One place for every event. The <b>CASPAM verification</b> column shows each event's own switch — change it in the event's registration settings.</p>
+<div class="module"><table style="width:100%">
+ <thead><tr><th>Event</th><th>Built-in form</th><th>CASPAM verification</th><th>Registered</th><th>Paid / free</th><th>Needs review</th><th>Entered</th><th>Revenue (PKR)</th><th>Open</th><th>Excel reports</th></tr></thead>
+ <tbody>
+ {% for r in rows %}<tr>
+  <td><b>{{ r.event.title }}</b><br><small>{{ r.event.get_status_display }}{% if r.event.start_at %} · {{ r.event.start_at|date:"d M Y" }}{% endif %}</small></td>
+  <td>{% if r.cfg.builtin_enabled %}ON{% else %}OFF (legacy){% endif %}</td>
+  <td>{% if r.cfg.caspam_verification_enabled %}<b>ON</b> ({{ r.cfg.caspam_price|floatformat:"0g" }} / {{ r.cfg.external_price|floatformat:"0g" }}){% else %}OFF{% endif %}</td>
+  <td>{{ r.s.total }}{% if r.cfg.capacity %} / {{ r.cfg.capacity }}{% endif %}</td><td>{{ r.s.paid }}</td><td>{{ r.s.review }}</td><td>{{ r.s.in_ }}</td><td>{{ r.s.revenue|default:0|floatformat:"0g" }}</td>
+  <td><a href="{% url 'admin:registrations_registration_changelist' %}?event__id__exact={{ r.event.pk }}">Registrations</a> ·
+      <a href="{% url 'admin:registrations_eventregistrationconfig_change' r.cfg.pk %}">Settings</a>{% if perms.registrations.perform_checkin and r.cfg.builtin_enabled %} · <a href="{% url 'registrations:checkin' %}?event={{ r.event.pk }}">Check-in</a>{% endif %}</td>
+  <td>{% if perms.registrations.export_registrations %}{% for key, k in kinds.items %}<a href="{% url 'registrations:export' r.event.pk key %}">{{ k.0 }}</a>{% if not forloop.last %}<br>{% endif %}{% endfor %}{% endif %}</td>
+ </tr>{% empty %}<tr><td colspan="10">No events yet.</td></tr>{% endfor %}
+ </tbody></table></div>
+{% endblock %}

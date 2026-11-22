@@ -51,7 +51,8 @@ class SeedDataTests(TestCase):
 
     def test_roles_created(self):
         self.assertEqual(set(Group.objects.values_list("name", flat=True)),
-                         {"Website Administrator", "Content Editor", "Membership Manager"})
+                         {"Website Administrator", "Content Editor", "Membership Manager",
+                          "Super Admin", "Event Manager", "Finance Manager", "Check-in Staff"})
 
     def test_no_invented_events_or_news(self):
         self.assertEqual(Event.objects.count(), 0)

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "apps.gallery.apps.GalleryConfig",
     "apps.news.apps.NewsConfig",
     "apps.membership.apps.MembershipConfig",
+    "apps.registrations.apps.RegistrationsConfig",
 ]
 
 MIDDLEWARE = [

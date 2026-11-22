@@ -22,6 +22,7 @@ urlpatterns = [
     path("gallery/", include("apps.gallery.urls")),
     path("news/", include("apps.news.urls")),
     path("join/", include("apps.membership.urls")),
+    path("registrations/", include("apps.registrations.urls")),
 ]
 if settings.DEBUG or not settings.USE_CLOUDINARY:
     # Local media serving (development, or small deployments without Cloudinary)

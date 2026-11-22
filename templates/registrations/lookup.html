@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Find my registration | {{ site.short_name }}{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Find my registration" subtitle="Enter your reference and the email you registered with." crumbs=None %}
+<section class="section"><div class="container" style="max-width:560px">
+  {% for m in messages %}<div class="alert alert-danger">{{ m }}</div>{% endfor %}
+  <form method="post" novalidate class="side-card">{% csrf_token %}
+    <div class="mb-3"><label class="form-label" for="{{ form.reference.id_for_label }}">{{ form.reference.label }}</label>{{ form.reference }}{{ form.reference.errors }}</div>
+    <div class="mb-3"><label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>{{ form.email }}{{ form.email.errors }}</div>
+    <button class="btn btn-navy" type="submit">Open my registration</button>
+  </form>
+</div></section>
+{% endblock %}

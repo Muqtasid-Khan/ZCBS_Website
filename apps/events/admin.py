@@ -88,6 +88,13 @@ class EventAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["title"]}
     filter_horizontal = ["organizers", "related_events"]
     inlines = [HighlightInline, SpeakerInline, MediaInline]
+
+    def get_inline_instances(self, request, obj=None):
+        from apps.registrations.admin import SettingsInline
+        inst = super().get_inline_instances(request, obj)
+        if obj is not None:      # the registration settings row is created automatically when the event is first saved
+            inst.append(SettingsInline(self.model, self.admin_site))
+        return inst
     actions = [publish, archive, draft, feature, unfeature, duplicate]
     readonly_fields = ["page_link", "upload_link"]
     save_on_top = True
