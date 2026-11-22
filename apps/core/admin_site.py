@@ -7,7 +7,7 @@ class ZCBSAdminSite(AdminSite):
     site_title = "ZCBS Dashboard"
     index_title = "Manage your website"
     index_template = "admin/zcbs_index.html"
-    ORDER = ["events", "gallery", "news", "team", "membership", "core", "auth"]
+    ORDER = ["events", "registrations", "gallery", "news", "team", "membership", "core", "auth"]
 
     def get_app_list(self, request, app_label=None):
         apps = super().get_app_list(request, app_label)

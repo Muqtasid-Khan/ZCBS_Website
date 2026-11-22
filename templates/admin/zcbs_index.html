@@ -19,6 +19,8 @@
 </div>
 <div class="zcbs-quick">
   <h3>Quick actions</h3>
+  {% if perms.registrations.view_dashboard %}<a href="{% url 'registrations:dashboard' %}">Event registrations &amp; exports</a>{% endif %}
+  {% if perms.registrations.perform_checkin %}<a href="{% url 'registrations:checkin' %}">Entry check-in</a>{% endif %}
   <a href="{% url 'admin:gallery_mediaitem_bulk' %}">Upload photographs</a>
   <a href="{% url 'admin:news_announcement_add' %}">New announcement</a>
   <a href="{% url 'admin:team_teammember_changelist' %}">Manage team</a>

@@ -8,5 +8,6 @@ class CoreConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
 
     def ready(self):
-        from .roles import create_roles
+        from .roles import create_registration_roles, create_roles
         post_migrate.connect(create_roles)
+        post_migrate.connect(create_registration_roles)

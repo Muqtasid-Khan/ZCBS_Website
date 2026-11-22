@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Entry check-in{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Entry check-in" subtitle="Staff only — enter the participant's code." crumbs=None %}
+<section class="section"><div class="container" style="max-width:640px">
+  {% for m in messages %}<div class="alert alert-danger">{{ m }}</div>{% endfor %}
+  <form method="post" novalidate class="side-card" autocomplete="off">{% csrf_token %}
+    <div class="mb-3"><label class="form-label" for="{{ form.event.id_for_label }}">{{ form.event.label }}</label>{{ form.event }}{{ form.event.errors }}</div>
+    <div class="mb-3"><label class="form-label" for="{{ form.code.id_for_label }}">{{ form.code.label }}</label>{{ form.code }}{{ form.code.errors }}</div>
+    <button class="btn btn-navy" type="submit" name="do" value="lookup">Check code</button>
+  </form>
+  {% if result %}
+  <div class="side-card mt-4" style="border-top:4px solid {% if result.admitted %}#198754{% elif result.admitted == False %}#dc3545{% elif result.can_admit %}#198754{% else %}#dc3545{% endif %}">
+    {% if result.admitted %}<h3 class="text-success">✔ Entry confirmed</h3><p>{{ result.message }}</p>
+    {% elif result.admitted == False %}<h3 class="text-danger">✖ Not admitted</h3><p>{{ result.message }}</p>{% endif %}
+    {% if result.reg %}<p class="mb-2"><b>{{ result.reg.full_name }}</b> · {{ result.reg.reference }}<br><span class="small text-muted">{{ result.reg.event.title }}{% if result.reg.event.reg_config.caspam_verification_enabled %} · {{ result.reg.get_category_display }}{% endif %}</span></p>{% endif %}
+    <ul class="list-unstyled small mb-3">{% for ok, text in result.checks %}<li>{% if ok %}<span class="text-success">✔</span>{% else %}<span class="text-danger">✖</span>{% endif %} {{ text }}</li>{% endfor %}</ul>
+    {% if result.can_admit %}
+    <form method="post">{% csrf_token %}<input type="hidden" name="code" value="{{ result.reg.verification_code }}"><input type="hidden" name="event" value="{{ result.reg.event_id }}">
+      <button class="btn btn-gold btn-lg w-100" type="submit" name="do" value="admit">ADMIT — mark pass as used</button></form>
+    {% endif %}
+  </div>
+  {% endif %}
+</div></section>
+{% endblock %}

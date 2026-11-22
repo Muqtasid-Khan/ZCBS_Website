@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Register — {{ event.title }} | {{ site.short_name }}{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="Register" subtitle=event.title eyebrow="Event registration" crumbs=None %}
+<section class="section"><div class="container"><div class="row g-5">
+  <div class="col-lg-4">
+    <div class="side-card" style="border-top:3px solid var(--gold)">
+      <h3>{{ event.title }}</h3>
+      {% if event.start_at %}<p class="small mb-1"><i class="bi bi-calendar-event me-2"></i>{{ event.start_at|date:"l, d M Y · g:i A" }}</p>{% endif %}
+      {% if event.venue %}<p class="small mb-1"><i class="bi bi-geo-alt me-2"></i>{{ event.venue }}</p>{% endif %}
+      {% if event.registration_deadline %}<p class="small mb-1"><i class="bi bi-hourglass-split me-2"></i>Registration closes {{ event.registration_deadline|date:"d M Y, g:i A" }}</p>{% endif %}
+      <hr>
+      {% if cfg.caspam_verification_enabled %}
+        <p class="small mb-1"><b>CASPAM student (verified):</b> PKR {{ cfg.caspam_price|floatformat:"0g" }}</p>
+        <p class="small mb-1"><b>External participant:</b> PKR {{ cfg.external_price|floatformat:"0g" }}</p>
+        <p class="small text-muted mb-0">CASPAM prices apply only after your roll number is checked against the official list.</p>
+      {% elif cfg.standard_price > 0 %}<p class="small mb-0"><b>Ticket:</b> PKR {{ cfg.standard_price|floatformat:"0g" }}</p>
+      {% else %}<p class="small mb-0"><b>Free registration</b></p>{% endif %}
+      {% if cfg.seats_left is not None %}<p class="small text-muted mt-2 mb-0">{{ cfg.seats_left }} seat{{ cfg.seats_left|pluralize }} left</p>{% endif %}
+    </div>
+    <p class="small mt-3"><a href="{% url 'registrations:lookup' %}">Already registered? Find my registration →</a></p>
+  </div>
+  <div class="col-lg-8">
+  {% if not open %}<div class="alert alert-warning">Registration for this event is closed.</div>
+  {% elif full %}<div class="alert alert-warning">Sorry — this event has reached its capacity.</div>
+  {% else %}
+  <form method="post" novalidate class="side-card" id="reg-form">{% csrf_token %}
+    <div style="position:absolute;left:-9999px" aria-hidden="true">{{ form.website }}</div>
+    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+    {% if messages %}{% for m in messages %}<div class="alert alert-danger">{{ m }}</div>{% endfor %}{% endif %}
+    <div class="row g-3">
+    {% for field in form %}{% if field.name != "website" %}
+      <div class="col-12 {% if field.name == 'caspam_roll' or field.name == 'second_factor' %}caspam-only{% elif field.name != 'participant_type' and field.name != 'full_name' and field.name != 'email' %}col-md-6{% endif %}"
+           {% if field.name == 'caspam_roll' or field.name == 'second_factor' %}style="display:none"{% endif %}>
+        {% if field.name == "participant_type" %}
+          <span class="form-label d-block">{{ field.label }}</span>
+          {% for radio in field %}<div class="form-check mb-1">{{ radio.tag }}<label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label></div>{% endfor %}
+        {% elif field.field.widget.input_type == "checkbox" %}
+          <div class="form-check">{{ field }}<label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label></div>
+        {% else %}
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}
+        {% endif %}
+        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+        {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+    {% endif %}{% endfor %}
+    </div>
+    <p class="small text-muted mt-3 mb-3">Your details are used only to manage this event's registration.{% if cfg.caspam_verification_enabled %} CASPAM details are compared with the official list and are not shown to anyone else.{% endif %}</p>
+    <button class="btn btn-navy" type="submit">Submit registration</button>
+  </form>
+  {% if cfg.caspam_verification_enabled %}<script>
+  (function(){
+    var radios=document.querySelectorAll('input[name="participant_type"]');
+    if(!radios.length) return;
+    function sync(){
+      var on=document.querySelector('input[name="participant_type"]:checked');
+      var show=on && on.value==='caspam';
+      document.querySelectorAll('.caspam-only').forEach(function(el){el.style.display=show?'':'none';});
+    }
+    radios.forEach(function(r){r.addEventListener('change',sync);}); sync();
+  })();
+  </script>{% endif %}
+  {% endif %}
+  </div>
+</div></div></section>
+{% endblock %}

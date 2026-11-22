@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}My registration — {{ event.title }}{% endblock %}
+{% block robots %}<meta name="robots" content="noindex, nofollow, noarchive">{% endblock %}
+{% block head %}<style>
+ .zpass{border:2px solid var(--navy,#14213d);border-radius:18px;padding:1.6rem;background:#fff;max-width:460px;position:relative;overflow:hidden}
+ .zpass .zcode{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:2rem;letter-spacing:.08em;font-weight:700;text-align:center;margin:.8rem 0;user-select:none}
+ .zpass .zstate{display:inline-block;padding:.25rem .8rem;border-radius:99px;font-weight:700;font-size:.8rem;letter-spacing:.06em}
+ .zpass.active .zstate{background:#c6efce;color:#14532d}.zpass.used .zstate{background:#ffeb9c;color:#7a5200}.zpass.revoked .zstate{background:#ffc7ce;color:#7f1d1d}
+ .zpass .zclock{font-variant-numeric:tabular-nums;font-size:.8rem;color:#555;text-align:center}
+ @media print{.zpass{display:none}}
+</style>{% endblock %}
+{% block content %}
+{% include "partials/page_header.html" with title="My registration" subtitle=event.title eyebrow="Reference "|add:reg.reference crumbs=None %}
+<section class="section"><div class="container"><div class="row g-5">
+ <div class="col-lg-6">
+  {% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>{% endfor %}
+  <div class="side-card">
+    <h3>Details</h3>
+    <dl class="row small mb-0">
+      <dt class="col-5">Name</dt><dd class="col-7">{{ reg.full_name }}</dd>
+      <dt class="col-5">Reference</dt><dd class="col-7"><b>{{ reg.reference }}</b></dd>
+      {% if cfg.caspam_verification_enabled %}
+      <dt class="col-5">Category</dt><dd class="col-7">{{ reg.get_category_display }}</dd>
+      {% if reg.claimed_caspam %}<dt class="col-5">CASPAM check</dt><dd class="col-7">{{ reg.get_verification_status_display }}</dd>{% endif %}
+      {% endif %}
+      <dt class="col-5">Ticket</dt><dd class="col-7">{% if reg.price > 0 %}PKR {{ reg.price|floatformat:"0g" }}{% else %}Free{% endif %}{% if reg.verification_status == "pending_review" %} <span class="text-muted">(provisional)</span>{% endif %}</dd>
+      <dt class="col-5">Payment</dt><dd class="col-7">{{ reg.get_payment_status_display }}</dd>
+    </dl>
+    {% if reg.verification_status == "pending_review" %}<div class="alert alert-warning mt-3 mb-0 small">Your CASPAM details need a quick manual check by the organisers. Payment details will appear here as soon as the check is finished.</div>
+    {% elif reg.verification_status == "not_verified" and reg.claimed_caspam %}<div class="alert alert-info mt-3 mb-0 small">We could not match your CASPAM details, so the external price applies. If you think this is a mistake, contact the organisers with your reference.</div>{% endif %}
+    {% if cfg.confirmation_note %}<p class="small mt-3 mb-0">{{ cfg.confirmation_note|linebreaksbr }}</p>{% endif %}
+  </div>
+
+  {% if reg.payment_instructions_visible %}
+  <div class="side-card mt-4"><h3>Pay PKR {{ reg.price|floatformat:"0g" }}</h3>
+    {% if cfg.payment_instructions %}<p class="small">{{ cfg.payment_instructions|linebreaksbr }}</p>{% endif %}
+    {% for m in methods %}<div class="small border-bottom py-2"><b>{{ m.title }}</b>{% if m.account_title %} · {{ m.account_title }}{% endif %}{% if m.account_number %} · <code>{{ m.account_number }}</code>{% endif %}{% if m.instructions %}<br>{{ m.instructions|linebreaksbr }}{% endif %}</div>
+    {% empty %}<p class="small text-muted">Payment methods have not been published yet. Please check back or contact the organisers.</p>{% endfor %}
+    {% if methods and pay_form %}
+    <form method="post" class="mt-3" novalidate>{% csrf_token %}<input type="hidden" name="action" value="payment">
+      {% if pay_form.non_field_errors %}<div class="alert alert-danger">{{ pay_form.non_field_errors }}</div>{% endif %}
+      <div class="mb-2"><label class="form-label" for="{{ pay_form.method.id_for_label }}">{{ pay_form.method.label }}</label>{{ pay_form.method }}{{ pay_form.method.errors }}</div>
+      <div class="mb-2"><label class="form-label" for="{{ pay_form.reference.id_for_label }}">{{ pay_form.reference.label }}</label>{{ pay_form.reference }}{{ pay_form.reference.errors }}</div>
+      <div class="mb-3"><label class="form-label" for="{{ pay_form.note.id_for_label }}">{{ pay_form.note.label }}</label>{{ pay_form.note }}</div>
+      <button class="btn btn-gold" type="submit">I have paid — submit details</button>
+    </form>{% endif %}
+  </div>
+  {% elif reg.payment_status == "payment_submitted" or reg.payment_status == "under_review" %}
+  <div class="alert alert-info mt-4 small">Your payment details were received and are being checked. This page updates when the finance team has confirmed them.</div>
+  {% endif %}
+ </div>
+
+ {% if cfg.pass_required %}
+ <div class="col-lg-6">
+  <h3 class="h5 mb-3">Entry pass</h3>
+  {% if reg.pass_status == "inactive" %}
+    <div class="side-card"><p class="mb-2"><b>Your pass is not active yet.</b></p><ul class="small mb-0">{% for b in blockers %}<li>{{ b }}</li>{% endfor %}</ul></div>
+  {% else %}
+    <div class="zpass {{ reg.pass_status }}" id="zpass" data-status="{{ reg.pass_status }}" data-url="{% url 'registrations:pass_status' reg.access_token %}">
+      <div class="small text-uppercase text-muted">{{ site.short_name }} · Entry pass</div>
+      <h4 class="mt-1 mb-0">{{ event.title }}</h4>
+      {% if event.start_at %}<div class="small text-muted">{{ event.start_at|date:"d M Y · g:i A" }}{% if event.venue %} · {{ event.venue }}{% endif %}</div>{% endif %}
+      <hr>
+      <div><b>{{ reg.full_name }}</b></div><div class="small text-muted">Ref {{ reg.reference }}{% if cfg.caspam_verification_enabled %} · {{ reg.get_category_display }}{% endif %}</div>
+      {% if reg.pass_status == "active" %}<div class="zcode" aria-label="Verification code">{{ reg.verification_code }}</div>
+      <div class="text-center"><span class="zstate">VALID — SHOW AT ENTRY</span></div>
+      {% elif reg.pass_status == "used" %}<div class="text-center my-4"><span class="zstate">ALREADY USED</span><div class="small mt-2">Entered {{ reg.checked_in_at|date:"d M Y, g:i A" }}</div></div>
+      {% else %}<div class="text-center my-4"><span class="zstate">REVOKED</span><div class="small mt-2">Please contact the organisers.</div></div>{% endif %}
+      <div class="zclock" id="zclock"></div>
+    </div>
+    <p class="small text-muted mt-3">This live pass cannot be downloaded. Entry is confirmed by the organisers' system when your code is checked, and each code works only once — a screenshot does not give extra access.</p>
+    <script>
+    (function(){
+      var el=document.getElementById('zpass'); if(!el) return;
+      var clock=document.getElementById('zclock');
+      setInterval(function(){clock.textContent=new Date().toLocaleString();},1000);
+      function poll(){fetch(el.dataset.url,{cache:'no-store',credentials:'same-origin'}).then(function(r){return r.json();})
+        .then(function(d){if(d.status!==el.dataset.status){location.reload();}}).catch(function(){});}
+      setInterval(poll,15000);
+    })();
+    </script>
+  {% endif %}
+ </div>
+ {% endif %}
+</div></div></section>
+{% endblock %}
