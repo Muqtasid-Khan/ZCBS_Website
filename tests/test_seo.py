@@ -79,3 +79,19 @@ class SeoTest(TestCase):
 
     def test_404_has_status_404(self):
         self.assertEqual(self.client.get("/does-not-exist/").status_code, 404)
+
+
+class AdminBrandingTest(TestCase):
+    def test_login_page_follows_site_settings(self):
+        from apps.core.models import SiteSettings
+        SiteSettings.load()
+        SiteSettings.objects.update(primary_color="#112233", accent_color="#AABBCC",
+                                    logo="branding/new-logo.png", favicon="branding/new-icon.png")
+        html = self.client.get("/admin/login/").content.decode()
+        self.assertIn("branding/new-logo.png", html)
+        self.assertIn("branding/new-icon.png", html)
+        self.assertIn("--zcbs-navy:#112233", html)
+
+    def test_login_page_falls_back_to_builtin_logo(self):
+        html = self.client.get("/admin/login/").content.decode()
+        self.assertIn("brand/zcbs-emblem.svg", html)

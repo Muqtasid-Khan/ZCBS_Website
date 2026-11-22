@@ -38,6 +38,7 @@ def site(request):
     items = list(NavItem.objects.filter(is_visible=True))
     return {
         "site": s,
+        "site_settings": s,  # same object; the login page overwrites "site" with Django's own Site
         "nav_header": [i for i in items if i.location == NavItem.HEADER],
         "nav_footer": [i for i in items if i.location == NavItem.FOOTER],
         "current_year": timezone.now().year,
