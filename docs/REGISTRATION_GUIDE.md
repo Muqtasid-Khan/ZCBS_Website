@@ -31,6 +31,9 @@ A name alone never verifies anyone. The submitted CNIC is never stored.
 ## Payment workflow
 Statuses: Unpaid → Payment Submitted → Under Review → Paid / Rejected (resubmit allowed) → Refunded; "Free" for 0-price events. Participants submit method + transaction ID only; **only the Finance Manager/Super Admin can mark Paid** (dashboard actions). Price is always computed on the server. Payment methods are manual instructions (bank, Easypaisa, JazzCash, cash). **No online gateway is integrated.**
 
+## What the participant sees (status table)
+On their private registration page: **Pending** (waiting for payment or for your team to check the receipt) → **Registered** (you approved the payment) or **Payment not received** with your message (default: "Sorry, we didn't get your payment. For queries, please contact our team. Thank you."; editable per event in Registration settings). Finance changes it with the dashboard actions *Payment → APPROVE* / *REJECT*.
+
 ## Live pass and check-in
 * Pass lives on the participant's private page `/registrations/my/<random token>/` (no personal data in the URL, `no-store`, `noindex`). Shows event, name, reference, live status and a unique code `XXXXX-XXXXX`; no download, no QR, no PDF/image.
 * Active only when: not cancelled, verification not pending, payment Paid/Free, not revoked. Admins can revoke/restore.

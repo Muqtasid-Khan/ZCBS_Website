@@ -158,6 +158,26 @@ class ScenarioA_CaspamOn(Base):
         page = self.client.get(reverse("registrations:mine", args=[reg.access_token]))
         self.assertContains(page, reg.verification_code)
 
+    def test_participant_status_table_pending_registered_not_received(self):
+        self.caspam()
+        reg = Registration.objects.get()
+        fin = user_with_role("fin", "Finance Manager")
+        url = reverse("registrations:mine", args=[reg.access_token])
+        self.assertEqual(reg.public_status[1], "Pending")
+        self.assertContains(self.client.get(url), "Pending")
+        m = self.ev.reg_config.payment_methods.first()
+        services.submit_payment(reg, m, "TXN-STAT-1")
+        self.assertEqual(reg.public_status[1], "Pending")
+        services.change_payment(reg, "rejected", fin)
+        page = self.client.get(url)
+        self.assertContains(page, "Payment not received")
+        self.assertContains(page, "Sorry, we didn&#x27;t get your payment")
+        services.submit_payment(reg, m, "TXN-STAT-2")
+        services.change_payment(reg, "paid", fin)
+        page = self.client.get(url)
+        self.assertContains(page, "Registered")
+        self.assertNotContains(page, "Sorry, we didn")
+
     def test_illegal_payment_jumps_refused(self):
         self.caspam()
         reg = Registration.objects.get()

@@ -14,6 +14,15 @@
 <section class="section"><div class="container"><div class="row g-5">
  <div class="col-lg-6">
   {% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>{% endfor %}
+  {% with st=reg.public_status %}
+  <div class="side-card mb-4" style="border-top:4px solid var(--bs-{{ st.0 }})">
+    <h3>Registration status</h3>
+    <table class="table table-sm align-middle mb-2"><thead><tr><th>Reference</th><th>Name</th><th>Status</th></tr></thead>
+      <tbody><tr><td><b>{{ reg.reference }}</b></td><td>{{ reg.full_name }}</td><td><span class="badge text-bg-{{ st.0 }}">{{ st.1 }}</span></td></tr></tbody></table>
+    <p class="small mb-1">{{ st.2|linebreaksbr }}</p>
+    {% if st.0 == "danger" or st.0 == "warning" %}<p class="small text-muted mb-0">Questions? Contact our team{% if site.contact_email %}: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>{% endif %}{% if site.contact_phone %} · {{ site.contact_phone }}{% endif %}.</p>{% endif %}
+  </div>
+  {% endwith %}
   <div class="side-card">
     <h3>Details</h3>
     <dl class="row small mb-0">
@@ -32,7 +41,7 @@
   </div>
 
   {% if reg.payment_instructions_visible %}
-  <div class="side-card mt-4"><h3>Pay PKR {{ reg.price|floatformat:"0g" }}</h3>
+  <div class="side-card mt-4"><h3>{% if reg.payment_status == "rejected" %}Paid already? Submit your receipt again{% else %}Pay PKR {{ reg.price|floatformat:"0g" }}{% endif %}</h3>
     {% if cfg.payment_instructions %}<p class="small">{{ cfg.payment_instructions|linebreaksbr }}</p>{% endif %}
     {% for m in methods %}<div class="small border-bottom py-2"><b>{{ m.title }}</b>{% if m.account_title %} · {{ m.account_title }}{% endif %}{% if m.account_number %} · <code>{{ m.account_number }}</code>{% endif %}{% if m.instructions %}<br>{{ m.instructions|linebreaksbr }}{% endif %}</div>
     {% empty %}<p class="small text-muted">Payment methods have not been published yet. Please check back or contact the organisers.</p>{% endfor %}

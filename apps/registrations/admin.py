@@ -119,7 +119,7 @@ class ConfigAdmin(admin.ModelAdmin):
             "fields": ["caspam_verification_enabled", "dataset", "second_factor", "caspam_price", "external_price"],
             "description": "Switch this ON only for events that give CASPAM students a special price. OFF means the event never asks about CASPAM."}),
         ("Pricing when CASPAM verification is OFF", {"fields": ["standard_price"]}),
-        ("Messages & payment instructions", {"fields": ["confirmation_note", "payment_instructions"]}),
+        ("Messages & payment instructions", {"fields": ["confirmation_note", "payment_instructions", "not_paid_message"]}),
     ]
 
     def get_readonly_fields(self, request, obj=None):
@@ -166,7 +166,7 @@ class SettingsInline(admin.StackedInline):
 # ---------------------------------------------------------------- registrations
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ["reference", "full_name", "event", "category", "verification_badge", "price", "payment_status", "pass_state", "checked_in"]
+    list_display = ["reference", "full_name", "event", "category", "verification_badge", "price", "portal_status", "payment_status", "pass_state", "checked_in"]
     list_filter = ["event", "category", "verification_status", "payment_status", "state", ("checked_in_at", admin.EmptyFieldListFilter)]
     search_fields = ["reference", "full_name", "email", "phone"]
     list_select_related = ["event"]
@@ -208,6 +208,10 @@ class RegistrationAdmin(admin.ModelAdmin):
     @admin.display(description="Verification")
     def verification_badge(self, o):
         return o.get_verification_status_display()
+
+    @admin.display(description="Shown to participant")
+    def portal_status(self, o):
+        return o.public_status[1]
 
     @admin.display(description="Pass")
     def pass_state(self, o):
@@ -254,11 +258,11 @@ class RegistrationAdmin(admin.ModelAdmin):
     def act_payment_review(self, request, qs):
         self._pay(request, qs, Registration.REVIEW, "marked under review")
 
-    @admin.action(description="Payment → APPROVE (mark Paid; activates the pass)", permissions=["pay"])
+    @admin.action(description="Payment → APPROVE (participant sees REGISTERED; pass activates)", permissions=["pay"])
     def act_payment_paid(self, request, qs):
         self._pay(request, qs, Registration.PAID, "marked paid")
 
-    @admin.action(description="Payment → REJECT", permissions=["pay"])
+    @admin.action(description="Payment → REJECT (participant sees 'Sorry, we didn't get your payment')", permissions=["pay"])
     def act_payment_rejected(self, request, qs):
         self._pay(request, qs, Registration.REJECTED, "payment rejected (participant can resubmit)")
 

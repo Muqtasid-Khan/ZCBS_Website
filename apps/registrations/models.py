@@ -82,6 +82,10 @@ class EventRegistrationConfig(models.Model):
     confirmation_note = models.TextField("Message shown after registering", blank=True)
     payment_instructions = models.TextField("General payment instructions", blank=True,
                                             help_text="Shown with the payment methods below.")
+    not_paid_message = models.TextField(
+        "Message when payment is rejected / not received",
+        default="Sorry, we didn't get your payment. For queries, please contact our team. Thank you.",
+        help_text="Shown to the participant on their registration page when you reject their payment.")
 
     class Meta:
         verbose_name = "Registration settings"
@@ -267,6 +271,24 @@ class Registration(models.Model):
         if self.checked_in_at:
             return "used"
         return "active" if not self.pass_blockers() else "inactive"
+
+    @property
+    def public_status(self):
+        """What the participant sees: (css, label, message). Staff change it only through the checked payment actions."""
+        cfg = self.event.reg_config
+        if self.state == self.CANCELLED:
+            return "secondary", "Cancelled", "This registration was cancelled."
+        if self.verification_status == self.V_REVIEW:
+            return "warning", "Pending", "We are checking your CASPAM student details."
+        if self.payment_status in (self.PAID, self.NOT_REQUIRED):
+            return "success", "Registered", "Your registration is confirmed."
+        if self.payment_status == self.REJECTED:
+            return "danger", "Payment not received", cfg.not_paid_message
+        if self.payment_status == self.REFUNDED:
+            return "secondary", "Refunded", "Your payment was refunded."
+        if self.payment_status in (self.SUBMITTED, self.REVIEW):
+            return "warning", "Pending", "We received your payment details. Our team is verifying your receipt."
+        return "warning", "Pending", "Please pay and submit your payment details so our team can verify your receipt."
 
     @property
     def is_checked_in(self):
