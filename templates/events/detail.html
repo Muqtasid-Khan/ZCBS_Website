@@ -12,7 +12,7 @@
 {% block bodyclass %}has-hero{% endblock %}
 {% block content %}
 <header class="event-cover">
-  {% if event.card_image %}<div class="bg" style="background-image:url('{{ event.card_image.url }}')"></div>{% endif %}
+    {% if event.cover_image %}<div class="bg" style="background-image:url('{{ event.cover_image.url }}')"></div>{% endif %}
   <div class="container">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'core:home' %}">Home</a><span class="sep">/</span><a href="{% url 'events:index' %}">Events</a><span class="sep">/</span><a href="{% url 'events:index' %}?category={{ event.category.slug }}">{{ event.category.name }}</a></nav>
     <span class="tag mb-3">{{ event.category.name }}</span>{% if event.is_past %} <span class="tag solid">Past event</span>{% elif event.start_at %} <span class="tag solid">Upcoming</span>{% endif %}
