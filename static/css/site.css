@@ -271,7 +271,8 @@ input[type="submit"], input[type="button"] {
 @media (max-width:991px){.caspam-sym{font-size:8rem;top:2%}}
 /* Event cover: put the dark overlay ABOVE the poster and lift text contrast */
 .event-cover .bg{z-index:0}
-.event-cover::before{z-index:1;background:linear-gradient(0deg,var(--navy) 8%,color-mix(in srgb,var(--navy) 78%,transparent) 55%,color-mix(in srgb,var(--navy) 88%,transparent))}
+.event-cover::before{z-index:1;background:linear-gradient(0deg,var(--navy) 4%,color-mix(in srgb,var(--navy) 58%,transparent) 50%,color-mix(in srgb,var(--navy) 42%,transparent))}
+.event-cover .bg{opacity:.8}
 .event-cover .container{z-index:2}
 .event-cover .crumbs a{color:var(--gold-l)}
 .event-cover .tag{color:var(--gold-l);background:color-mix(in srgb,var(--navy) 75%,transparent)}
