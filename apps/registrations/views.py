@@ -26,7 +26,7 @@ def _private(resp):
     """Pages that show personal data: never cached, never indexed, never leak the address."""
     resp["Cache-Control"] = "no-store, private"
     resp["X-Robots-Tag"] = "noindex, nofollow"
-        resp["Referrer-Policy"] = "same-origin"
+    resp["Referrer-Policy"] = "same-origin"
     return resp
 
 
