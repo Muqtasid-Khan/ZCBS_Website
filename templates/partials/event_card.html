@@ -1,7 +1,7 @@
 {% load static %}
 <article class="card-z card-z--event">
   <a class="media" href="{{ e.get_absolute_url }}" tabindex="-1" aria-hidden="true">
-    {% if e.card_image %}<img src="{{ e.poster.url }}" alt="" loading="lazy">{% else %}<div class="ph"><i class="bi {{ e.category.icon }}"></i></div>{% endif %}
+        {% if e.poster %}<img src="{{ e.poster.url }}" alt="" loading="lazy">{% else %}<div class="ph"><i class="bi {{ e.category.icon }}"></i></div>{% endif %}
     {% if e.start_at %}<div class="date-badge"><b>{{ e.start_at|date:"d" }}</b><span>{{ e.start_at|date:"M Y" }}</span></div>{% endif %}
   </a>
   <div class="body">
