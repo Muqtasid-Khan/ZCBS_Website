@@ -278,3 +278,15 @@ input[type="submit"], input[type="button"] {
 .event-cover .tag{color:var(--gold-l);background:color-mix(in srgb,var(--navy) 75%,transparent)}
 .event-cover .tag.solid{background:var(--gold);color:var(--navy);border-color:var(--gold)}
 .event-cover .tagline{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+/* Event cover: adapt to phones, tablets and very large screens */
+.event-cover{min-height:clamp(380px,68vh,760px)}
+@media (max-width:991px){
+  .event-cover{min-height:clamp(340px,60vh,560px);padding:calc(84px + 2.5rem) 0 3rem}
+  .event-cover .bg{background-position:center 30%}
+}
+@media (max-width:575px){
+  .event-cover{min-height:auto;padding:calc(84px + 1.5rem) 0 2.75rem}
+  .event-cover h1{font-size:clamp(2rem,9vw,2.6rem)}
+  .event-cover .tagline{font-size:1.05rem}
+  .event-cover .crumbs{font-size:.7rem;line-height:1.8}
+}
