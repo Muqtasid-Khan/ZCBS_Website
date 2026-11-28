@@ -75,6 +75,9 @@ main{min-height:60vh}
 .card-z .media{position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,var(--navy),var(--navy-3));overflow:hidden}
 .card-z .media img{width:100%;height:100%;object-fit:cover;transition:transform .8s}.card-z:hover .media img{transform:scale(1.05)}
 .card-z .media .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:2.4rem;opacity:.85}
+/* Event cards: show the whole poster, never crop it */
+.card-z--event .media img{object-fit:contain}
+.card-z--event:hover .media img{transform:none}
 .card-z .body{padding:1.4rem 1.5rem 1.6rem;display:flex;flex-direction:column;flex:1}
 .card-z h3{font-size:1.45rem;margin:.3rem 0 .5rem}.card-z h3 a{text-decoration:none;color:inherit}
 .card-z .meta{font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.3rem 1rem}.card-z .meta i{color:var(--gold-d);margin-right:.3rem}
