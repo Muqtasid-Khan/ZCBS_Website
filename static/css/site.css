@@ -269,3 +269,11 @@ input[type="submit"], input[type="button"] {
 .caspam-frame::after{content:"";position:absolute;inset:8px;border-radius:3px;background:linear-gradient(180deg,transparent 55%,color-mix(in srgb,var(--navy) 35%,transparent));pointer-events:none}
 .caspam-actions{display:flex;flex-wrap:wrap;gap:.75rem 1.75rem;margin-top:1.25rem}
 @media (max-width:991px){.caspam-sym{font-size:8rem;top:2%}}
+/* Event cover: put the dark overlay ABOVE the poster and lift text contrast */
+.event-cover .bg{z-index:0}
+.event-cover::before{z-index:1;background:linear-gradient(0deg,var(--navy) 8%,color-mix(in srgb,var(--navy) 78%,transparent) 55%,color-mix(in srgb,var(--navy) 88%,transparent))}
+.event-cover .container{z-index:2}
+.event-cover .crumbs a{color:var(--gold-l)}
+.event-cover .tag{color:var(--gold-l);background:color-mix(in srgb,var(--navy) 75%,transparent)}
+.event-cover .tag.solid{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.event-cover .tagline{text-shadow:0 1px 14px rgba(0,0,0,.55)}
