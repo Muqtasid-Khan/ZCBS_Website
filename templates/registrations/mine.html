@@ -10,7 +10,7 @@
  @media print{.zpass{display:none}}
 </style>{% endblock %}
 {% block content %}
-{% include "partials/page_header.html" with title="My registration" subtitle=event.title eyebrow="Reference "|add:reg.reference crumbs=None %}
+{% include "partials/page_header.html" with title="My registration" subtitle=event.title eyebrow="Your private registration" crumbs=None %}
 <section class="section"><div class="container"><div class="row g-5">
  <div class="col-lg-6">
   {% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>{% endfor %}
@@ -18,7 +18,7 @@
   <div class="side-card mb-4" style="border-top:4px solid var(--bs-{{ st.0 }})">
     <h3>Registration status</h3>
     <table class="table table-sm align-middle mb-2"><thead><tr><th>Reference</th><th>Name</th><th>Status</th></tr></thead>
-      <tbody><tr><td><b>{{ reg.reference }}</b></td><td>{{ reg.full_name }}</td><td><span class="badge text-bg-{{ st.0 }}">{{ st.1 }}</span></td></tr></tbody></table>
+      <tbody><tr><td><span id="m-ref" class="fw-bold" data-v="{{ reg.reference }}">••••••••</span> <button type="button" class="btn btn-link btn-sm p-0 zreveal" data-for="m-ref">Show</button></td><td>{{ reg.full_name }}</td><td><span class="badge text-bg-{{ st.0 }}">{{ st.1 }}</span></td></tr></tbody></table>
     <p class="small mb-1">{{ st.2|linebreaksbr }}</p>
     {% if st.0 == "danger" or st.0 == "warning" %}<p class="small text-muted mb-0">Questions? Contact our team{% if site.contact_email %}: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>{% endif %}{% if site.contact_phone %} · {{ site.contact_phone }}{% endif %}.</p>{% endif %}
   </div>
@@ -27,7 +27,7 @@
     <h3>Details</h3>
     <dl class="row small mb-0">
       <dt class="col-5">Name</dt><dd class="col-7">{{ reg.full_name }}</dd>
-      <dt class="col-5">Reference</dt><dd class="col-7"><b>{{ reg.reference }}</b></dd>
+      <dt class="col-5">Reference</dt><dd class="col-7"><span id="m-ref2" class="fw-bold" data-v="{{ reg.reference }}">••••••••</span> <button type="button" class="btn btn-link btn-sm p-0 zreveal" data-for="m-ref2">Show</button></dd>
       {% if cfg.caspam_verification_enabled %}
       <dt class="col-5">Category</dt><dd class="col-7">{{ reg.get_category_display }}</dd>
       {% if reg.claimed_caspam %}<dt class="col-5">CASPAM check</dt><dd class="col-7">{{ reg.get_verification_status_display }}</dd>{% endif %}
@@ -70,8 +70,8 @@
       <h4 class="mt-1 mb-0">{{ event.title }}</h4>
       {% if event.start_at %}<div class="small text-muted">{{ event.start_at|date:"d M Y · g:i A" }}{% if event.venue %} · {{ event.venue }}{% endif %}</div>{% endif %}
       <hr>
-      <div><b>{{ reg.full_name }}</b></div><div class="small text-muted">Ref {{ reg.reference }}{% if cfg.caspam_verification_enabled %} · {{ reg.get_category_display }}{% endif %}</div>
-      {% if reg.pass_status == "active" %}<div class="zcode" aria-label="Verification code">{{ reg.verification_code }}</div>
+      <div><b>{{ reg.full_name }}</b></div><div class="small text-muted">{% if cfg.caspam_verification_enabled %}{{ reg.get_category_display }}{% endif %}</div>
+      {% if reg.pass_status == "active" %}<div class="zcode" aria-label="Verification code"><span id="m-code" data-v="{{ reg.verification_code }}">•••••••••••</span></div><div class="text-center mb-2"><button type="button" class="btn btn-link btn-sm zreveal" data-for="m-code">Show code</button></div>
       <div class="text-center"><span class="zstate">VALID — SHOW AT ENTRY</span></div>
       {% elif reg.pass_status == "used" %}<div class="text-center my-4"><span class="zstate">ALREADY USED</span><div class="small mt-2">Entered {{ reg.checked_in_at|date:"d M Y, g:i A" }}</div></div>
       {% else %}<div class="text-center my-4"><span class="zstate">REVOKED</span><div class="small mt-2">Please contact the organisers.</div></div>{% endif %}
@@ -92,4 +92,16 @@
  </div>
  {% endif %}
 </div></div></section>
+<script>
+document.querySelectorAll('.zreveal').forEach(function(b){
+  var label=b.textContent;
+  b.addEventListener('click',function(){
+    var m=document.getElementById(b.dataset.for), shown=b.dataset.shown==='1';
+    if(!m.dataset.mask) m.dataset.mask=m.textContent;
+    m.textContent=shown?m.dataset.mask:m.dataset.v;
+    b.textContent=shown?label:'Hide';
+    b.dataset.shown=shown?'0':'1';
+  });
+});
+</script>
 {% endblock %}
